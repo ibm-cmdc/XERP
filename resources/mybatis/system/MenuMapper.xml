@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuMapper">
+
+	<resultMap type="Menu" id="menuResultMap">
+		<id column="MENU_ID" property="MENU_ID" />
+		<result column="MENU_NAME" property="MENU_NAME" />
+		<result column="MENU_URL" property="MENU_URL" />
+		<result column="PARENT_ID" property="PARENT_ID" />
+		<result column="MENU_ORDER" property="MENU_ORDER" />
+		<result column="MENU_ICON" property="MENU_ICON" />
+		<result column="MENU_TYPE" property="MENU_TYPE" />
+		<result column="MENU_STATE" property="MENU_STATE" />
+		<result column="MPLATFORM" property="MPLATFORM" />
+	</resultMap>
+
+	<!-- ztree -->
+	<resultMap type="Menu" id="menuZtreeResultMap">
+		<id column="MENU_ID" property="MENU_ID" />
+		<result column="MENU_NAME" property="MENU_NAME" />
+		<result column="MENU_URL" property="MENU_URL" />
+		<result column="PARENT_ID" property="PARENT_ID" />
+		<result column="MENU_ORDER" property="MENU_ORDER" />
+		<result column="MENU_ICON" property="MENU_ICON" />
+		<result column="MENU_TYPE" property="MENU_TYPE" />
+		<result column="target" property="target"></result>
+	</resultMap>
+
+	<!--表名 -->
+	<sql id="tableName">
+		"SYS_MENU"
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		"MENU_ID",
+		"MENU_NAME",
+		"MENU_URL",
+		"PARENT_ID",
+		"MENU_ORDER",
+		"MENU_ICON",
+		"MENU_TYPE",
+		"MENU_STATE",
+		"MPLATFORM"
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{MENU_ID},
+		#{MENU_NAME},
+		#{MENU_URL},
+		#{PARENT_ID},
+		#{MENU_ORDER},
+		#{MENU_ICON},
+		#{MENU_TYPE},
+		#{MENU_STATE},
+		#{MPLATFORM}
+	</sql>
+	<sql id="MenuCconditions">
+		<if test="MENU_ID!=null and MENU_ID!=''">
+			and "MENU_ID"=#{MENU_ID}
+		</if>
+		<if test="MENU_NAME!=null and MENU_NAME!=''">
+			and "MENU_NAME"=#{MENU_NAME}
+		</if>
+		<if test="MENU_URL!=null and MENU_URL!=''">
+			and "MENU_URL"=#{MENU_URL}
+		</if>
+		<if test="PARENT_ID!=null and PARENT_ID!=''">
+			and "PARENT_ID"=#{PARENT_ID}
+		</if>
+		<if test="MENU_ORDER!=null and MENU_ORDER!=''">
+			and "MENU_ORDER"=#{MENU_ORDER}
+		</if>
+		<if test="MENU_ICON!=null and MENU_ICON!=''">
+			and "MENU_ICON"=#{MENU_ICON}
+		</if>
+		<if test="MENU_TYPE!=null and MENU_TYPE!=''">
+			and "MENU_TYPE"=#{MENU_TYPE}
+		</if>
+		<if test="MENU_STATE!=null and MENU_STATE!=''">
+			and "MENU_STATE"=#{MENU_STATE}
+		</if>
+		<if test="MPLATFORM!=null and MPLATFORM!=''">
+			and "MPLATFORM"=#{MPLATFORM}
+		</if>
+	</sql>
+	<!--通过ID获取其子一级菜单 -->
+	<select id="listSubMenuByParentId" parameterType="String" resultMap="menuResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where "PARENT_ID" = #{parentId}
+		order by "MENU_ORDER"
+	</select>
+
+	<!--通过菜单ID获取数据 -->
+	<select id="getMenuById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where "MENU_ID"=#{MENU_ID}
+	</select>
+	
+	<!--通过菜单ID获取数据 -->
+	<select id="queryMenu" parameterType="pd" resultMap="menuResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+        <include refid="MenuCconditions"/>
+	</select>
+	
+	<!--新增 -->
+	<insert id="insertMenu" parameterType="pd">
+		<selectKey keyProperty="keyMenu_ID" resultType="String"
+			order="BEFORE">
+			select SYS_MENU_SEQ.NEXTVAL from dual
+		</selectKey>
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		${keyMenu_ID},
+		#{MENU_NAME},
+		#{MENU_URL},
+		#{PARENT_ID},
+		#{MENU_ORDER},
+		#{MENU_ICON},
+		#{MENU_TYPE},
+		#{MENU_STATE},
+		#{MPLATFORM}
+		)
+	</insert>
+
+	<!--取最大ID -->
+	<select id="findMaxId" parameterType="pd" resultType="pd">
+		select "MAX"("MENU_ID") "MID" from
+		<include refid="tableName"></include>
+	</select>
+
+	<!--删除菜单 -->
+	<delete id="deleteMenuById" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where "MENU_ID"=#{MENU_ID}
+	</delete>
+	<!-- 批量删除菜单 -->
+	<delete id="deletePLMenuById" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		"MENU_ID" in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		and
+		"PARENT_ID" != '100'
+	</delete>
+
+
+
+	<!--编辑 -->
+	<update id="updateMenu" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		"MENU_NAME"=#{MENU_NAME}
+		<if test="MENU_URL!=null and  MENU_URL!=''">
+			,"MENU_URL" =#{MENU_URL}
+		</if>
+		<if test="PARENT_ID!=null and  PARENT_ID!=''">
+			,"PARENT_ID" =#{PARENT_ID}
+		</if>
+		<if test="MENU_ORDER!=null and  MENU_ORDER!=''">
+			,"MENU_ORDER" =#{MENU_ORDER}
+		</if>
+		<if test="MENU_ICON!=null and  MENU_ICON!=''">
+			,"MENU_ICON" =#{MENU_ICON}
+		</if>
+		<if test="MENU_TYPE!=null and  MENU_TYPE!=''">
+			,"MENU_TYPE" =#{MENU_TYPE}
+		</if>
+		<if test="MENU_STATE!=null and  MENU_STATE!=''">
+			,"MENU_STATE" =#{MENU_STATE}
+		</if>
+		<if test="MPLATFORM!=null and  MPLATFORM!=''">
+			,"MPLATFORM" =#{MPLATFORM}
+		</if>
+		where
+		"MENU_ID"=#{MENU_ID}
+	</update>
+
+	<!--保存菜单图标 -->
+	<update id="editicon" parameterType="Menu">
+		update
+		<include refid="tableName"></include>
+		set
+		"MENU_ICON"=#{MENU_ICON}
+		where
+		"MENU_ID"=#{MENU_ID}
+	</update>
+
+</mapper>

@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<resultMap type="User" id="userAndRoleResultMap">
+		<id column="USER_ID" property="USER_ID" />
+		<result column="USERNAME" property="USERNAME" />
+		<result column="UPASSWORD" property="UPASSWORD" />
+		<result column="UNAME" property="UNAME" />
+		<result column="LAST_LOGIN" property="LAST_LOGIN" />
+		<result column="LAST_IP" property="LAST_IP" />
+		<result column="STATUS" property="STATUS" />
+		<result column="EMAIL" property="EMAIL" />
+		<result column="PHONE" property="PHONE" />
+		<result column="UGROUP" property="UGROUP" />
+		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="UCOMPANY" property="UCOMPANY" />
+		<result column="UCOSTCENTER" property="UCOSTCENTER" />
+		<result column="UORGANIZATION" property="UORGANIZATION" />
+		<result column="UPOSITION" property="UPOSITION" />
+		<result column="CREATETIME" property="CREATETIME" />
+		<result column="INTERSTART" property="INTERSTART" />
+		<result column="INTERDURA" property="INTERDURA" />
+		<result column="LAST_CHANGE" property="LAST_CHANGE" />
+		<result column="OPENID" property="OPENID" />
+		<result column="SECPOLICY" property="SECPOLICY" />
+		<association property="role" column="ROLE_ID" javaType="Role">
+			<id column="ROLE_ID" property="ROLE_ID" />
+			<result column="ROLE_NAME" property="ROLE_NAME" />
+			<result column="ROLE_RIGHTS" property="RIGHTS" />
+		</association>
+	</resultMap>
+
+
+	<resultMap type="User" id="userResultMap">
+		<id column="USER_ID" property="USER_ID" />
+		<result column="USERNAME" property="USERNAME" />
+		<result column="UPASSWORD" property="UPASSWORD" />
+		<result column="UNAME" property="UNAME" />
+		<result column="LAST_LOGIN" property="LAST_LOGIN" />
+		<result column="LAST_IP" property="LAST_IP" />
+		<result column="STATUS" property="STATUS" />
+		<result column="EMAIL" property="EMAIL" />
+		<result column="PHONE" property="PHONE" />
+		<result column="UGROUP" property="UGROUP" />
+		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="UCOMPANY" property="UCOMPANY" />
+		<result column="UCOSTCENTER" property="UCOSTCENTER" />
+		<result column="UORGANIZATION" property="UORGANIZATION" />
+		<result column="UPOSITION" property="UPOSITION" />
+		<result column="CREATETIME" property="CREATETIME" />
+		<result column="INTERSTART" property="INTERSTART" />
+		<result column="INTERDURA" property="INTERDURA" />
+		<result column="LAST_CHANGE" property="LAST_CHANGE" />
+		<result column="OPENID" property="OPENID" />
+		<result column="SECPOLICY" property="SECPOLICY" />
+	</resultMap>
+	
+	<resultMap type="Bo" id="boResultMap">
+		<id column="DB_ID" property="DB_ID" />
+		<result column="BO_NAME" property="BO_NAME" />
+		<result column="BO_ID" property="BO_ID" />
+		<result column="BO_KEY" property="BO_KEY" />
+		<result column="BO_VALUE" property="BO_VALUE" />
+		<result column="ADD1" property="ADD1" />
+		<result column="ADD2" property="ADD2" />
+		<result column="ADD3" property="ADD3" />
+		<result column="ADD4" property="ADD4" />
+		<result column="ADD5" property="ADD5" />
+		<result column="BPLATFORM" property="BPLATFORM" />
+	</resultMap>
+
+	<!--表名 -->
+	<sql id="tableName">
+		"SYS_USER"
+	</sql>
+	<sql id="roleTableName">
+		"SYS_ROLE"
+	</sql>
+	<sql id="boTableName">
+		"SYS_BO"
+	</sql>
+	<!-- <sql id="staffTableName"> "OA_STAFF" </sql> -->
+
+	<!-- 字段 -->
+	<sql id="Field">
+		"USER_ID",
+		"USERNAME",
+		"UPASSWORD",
+		"UNAME",
+		"ROLE_ID",
+		"LAST_LOGIN",
+		"LAST_IP",
+		"STATUS",
+		"EMAIL",
+		"PHONE",
+		"UGROUP",
+		"UPLATFORM",
+		"UCOMPANY",
+		"UCOSTCENTER",
+		"UORGANIZATION",
+		"UPOSITION",
+		"CREATETIME",
+		"INTERSTART",
+		"INTERDURA",
+		"LAST_CHANGE",
+		"OPENID",
+		"SECPOLICY"
+	</sql>
+   <sql id="UserCconditions">
+        <if test="USERNAME!=null and USERNAME!=''">
+			and "USERNAME" = #{USERNAME}
+		</if>
+		<if test="PASSWORD!=null  and PASSWORD!=''">
+			and "UPASSWORD"=#{UPASSWORD}
+		</if>
+		<if test="USER_ID!=null and USER_ID>0">
+			and "USER_ID" = #{USER_ID}
+		</if>
+		<if test="ROLE_ID!=null and  ROLE_ID!=''">
+			and "ROLE_ID"= #{ROLE_ID}
+		</if>
+		<if test="UPLATFORM!=null and  UPLATFORM!=''">
+			and "UPLATFORM"= #{UPLATFORM}
+		</if>
+		<if test="COMPANY!=null and  COMPANY!=''">
+			and "COMPANY"= #{COMPANY}
+		</if>
+		<if test="COSTCENTER!=null and  COSTCENTER!=''">
+			and "COSTCENTER"= #{COSTCENTER}
+		</if>
+		<if test="ORGANIZATION!=null and  ORGANIZATION!=''">
+			and "ORGANIZATION"= #{ORGANIZATION}
+		</if>
+		<if test="UPOSITION!=null and  UPOSITION!=''">
+			and "UPOSITION"= #{UPOSITION}
+		</if>
+		<if test="OPENID!=null and  OPENID!=''">
+			and "OPENID"= #{OPENID}
+		</if>
+    </sql>
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USER_ID},
+		#{USERNAME},
+		#{UPASSWORD},
+		#{UNAME},
+		#{ROLE_ID},
+		to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_IP},
+		#{STATUS},
+		#{EMAIL},
+		#{PHONE},
+		#{UGROUP},
+		#{UPLATFORM},
+		#{UCOMPANY},
+		#{UCOSTCENTER},
+		#{UORGANIZATION},
+		#{UPOSITION},
+		to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd'),
+		to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd'),
+		#{INTERDURA,jdbcType=NUMERIC},
+		to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd'),
+		#{OPENID},
+		#{SECPOLICY}
+	</sql>
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="USERNAME!=null and USERNAME!=''">
+			and "USERNAME" = #{USERNAME}
+		</if>
+		<if test="PASSWORD!=null  and PASSWORD!=''">
+			and "UPASSWORD"=#{UPASSWORD}
+		</if>
+		<if test="USER_ID!=null and USER_ID>0">
+			and "USER_ID" = #{USER_ID}
+		</if>
+	</select>
+	<select id="queryUserInfo"  parameterType="String" resultMap="userResultMap">
+		select
+		*
+		from 
+		    (
+		       SELECT ROWNUM AS rowno, 
+		              t.* 
+		       FROM SYS_USER t
+		       
+                <where>   1=1 
+               
+               <include refid="UserCconditions"/>
+                
+                <if test="rownum != null and rownum!=''">  
+                   <![CDATA[ AND ROWNUM <=#{rownum} order by USERNAME desc]]> 
+                </if>
+               </where>
+               
+             ) table_alias
+             
+         <where>
+         <if test="rowno != null and rowno!=''">  
+         <![CDATA[table_alias.rowno >=#{rowno}]]> 
+         </if>
+          </where>
+	</select>
+	
+	
+	
+	<!-- 通过用户ID获取用户信息和角色信息 -->
+	<select id="getUserAndRoleInfo" parameterType="String" resultMap="userAndRoleResultMap">
+		select u."USER_ID",
+		u."USERNAME",
+		u."UNAME" ,
+		u."UPASSWORD" ,
+		u."UPLATFORM",
+		<!-- u."SKIN", -->
+		r."ROLE_ID",
+		r."ROLE_NAME",
+		r."RIGHTS" as "ROLE_RIGHTS"
+		from
+		<include refid="tableName"></include>
+		u
+		left join
+		<include refid="roleTableName"></include>
+		r
+		on u."ROLE_ID"=r."ROLE_ID"
+		where 1=1
+		<if test="USERNAME!=null and UPASSWORD!=null">
+			and u."USERNAME" = #{USERNAME} and
+			u."UPASSWORD"=#{UPASSWORD}
+		</if>
+		<if test="USER_ID!=null and USER_ID>0">
+			and u."USER_ID" = #{USER_ID}
+		</if>
+		<if test="UPLATFORM!=null and  UPLATFORM!=''">
+			and "UPLATFORM"= #{UPLATFORM}
+		</if>
+	</select>
+
+
+
+
+	<select id="queryBoByUidUpa" parameterType="String" resultMap="boResultMap">
+		SELECT B.DB_ID,
+		B.BO_NAME,
+		B.BO_ID,
+		B.BO_KEY,
+		B.BO_VALUE,
+		B.ADD1,
+		B.ADD2,
+		B.ADD3,
+		B.ADD4,
+		B.ADD5,
+		B.BPLATFORM
+		FROM SYS_USER_OBJECT UO, SYS_USER
+		U,SYS_BO B
+		WHERE 1=1
+		AND UO.USER_ID=U.USER_ID
+		AND UO.BO_ID=B.DB_ID
+		<if test="USER_ID!=null and  USER_ID!=''">
+			AND U.USER_ID=#{USER_ID}
+		</if>
+		<if test="UPLATFORM!=null and  UPLATFORM!=''">
+			AND U.UPLATFORM =#{UPLATFORM}
+		</if>
+	</select>
+	<!-- 更新登录时间 -->
+	<update id="updateUser" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+			"USERNAME"=#{USERNAME}
+		<if test="UPASSWORD!=null and UPASSWORD!=''">
+			,"UPASSWORD"=#{UPASSWORD}
+		</if>
+		<if test="UNAME!=null and UNAME!=''">
+			,"UNAME"=#{UNAME}
+		</if>
+		<if test="ROLE_ID!=null and ROLE_ID!=''">
+			,"ROLE_ID"=#{ROLE_ID}
+		</if>
+		<if test="LAST_LOGIN!=null and LAST_LOGIN!=''">
+			,"LAST_LOGIN"=to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd')
+		</if>
+		<if test="LAST_IP!=null and LAST_IP!=''">
+			,"LAST_IP"=#{LAST_IP}
+		</if>
+		<if test="STATUS!=null and STATUS!=''">
+			,"STATUS"=#{STATUS}
+		</if>
+		<if test="EMAIL!=null and EMAIL!=''">
+			,"EMAIL"=#{EMAIL}
+		</if>
+		<if test="PHONE!=null and PHONE!=''">
+			,"PHONE"=#{PHONE}
+		</if>
+		<if test="UGROUP!=null and UGROUP!=''">
+			,"UGROUP"=#{UGROUP}
+		</if>
+		<if test="UPLATFORM!=null and UPLATFORM!=''">
+			,"UPLATFORM"=#{UPLATFORM}
+		</if>
+		<if test="UCOMPANY!=null and UCOMPANY!=''">
+			,"UCOMPANY"=#{UCOMPANY}
+		</if>
+		<if test="UCOSTCENTER!=null and UCOSTCENTER!=''">
+			,"UCOSTCENTER"=#{UCOSTCENTER}
+		</if>
+		<if test="UORGANIZATION!=null and UORGANIZATION!=''">
+			,"UORGANIZATION"=#{UORGANIZATION}
+		</if>
+		<if test="UPOSITION!=null and UPOSITION!=''">
+			,"UPOSITION"=#{UPOSITION}
+		</if>
+		<if test="CREATETIME!=null and CREATETIME!=''">
+			,"CREATETIME"=to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd')
+		</if>
+		<if test="INTERSTART!=null and INTERSTART!=''">
+		,"INTERSTART"=to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd')
+	    </if>
+		<if test="INTERDURA!=null and INTERDURA!=''">
+			,"INTERDURA"=#{INTERDURA,jdbcType=NUMERIC}
+		</if>
+		<if test="LAST_CHANGE!=null and LAST_CHANGE!=''">
+			,"LAST_CHANGE"=to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd')
+		</if>
+		<if test="OPENID!=null and OPENID!=''">
+			,"OPENID"=#{OPENID}
+		</if>
+		<if test="SECPOLICY!=null and SECPOLICY!=''">
+			,"SECPOLICY"=#{SECPOLICY}
+		</if>
+		where "USER_ID" = #{USER_ID}
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 更新登录时间 -->
+	<update id="updateLastLogin" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		"LAST_LOGIN" = #{LAST_LOGIN}
+		where "USER_ID" = #{USER_ID}
+	</update>
+
+	<!-- 通过用户ID获取用户信息和角色信息 -->
+	<select id="getUserAndRoleById" parameterType="String"
+		resultMap="userAndRoleResultMap">
+		select u."USER_ID",
+		u."USERNAME",
+		u."UNAME" ,
+		u."UPASSWORD" ,
+		<!-- u."SKIN", -->
+		r."ROLE_ID",
+		r."ROLE_NAME",
+		r."RIGHTS" as "ROLE_RIGHTS"
+		from
+		<include refid="tableName"></include>
+		u
+		left join
+		<include refid="roleTableName"></include>
+		r
+		on u."ROLE_ID"=r."ROLE_ID"
+		where u."STATUS"=0
+		and
+		u."USER_ID"=#{USER_ID}
+	</select>
+
+	<!-- 通过USERNAME获取数据 -->
+	<select id="findByUsername" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		"USERNAME" = #{USERNAME}
+	</select>
+
+	<!-- 存入IP -->
+	<update id="saveIP" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		"LAST_IP" = #{LAST_IP}
+		where
+		"USERNAME" = #{USERNAME}
+	</update>
+
+	<!-- 列出某角色下的所有用户 -->
+	<select id="listAllUserByRoldId" parameterType="pd" resultType="pd">
+		select "USER_ID"
+		from
+		<include refid="tableName"></include>
+		where
+		"ROLE_ID" = #{ROLE_ID}
+	</select>
+
+	<!-- 用户列表 -->
+	<select id="userlistPage" parameterType="page" resultType="pd">
+		select u."USER_ID",
+		u."USERNAME",
+		u."UPASSWORD"
+		u."LAST_LOGIN",
+		u."UNAME",
+		u."LAST_IP",
+		u."EMAIL",
+		u."NUMBER",
+		u."PHONE",
+		r."ROLE_ID",
+		r."ROLE_NAME"
+		from
+		<include refid="tableName"></include>
+		u,
+		<include refid="roleTableName"></include>
+		r
+		where u."ROLE_ID" = r."ROLE_ID"
+		and u."USERNAME" != 'admin'
+		and
+		r."PARENT_ID" = '1'
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			u."USERNAME" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			u."EMAIL" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			u."NUMBER"
+			LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			u."UNAME" LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			u."PHONE" LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色检索 -->
+			and u."ROLE_ID"=#{pd.ROLE_ID}
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u."LAST_LOGIN" &gt;= #{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u."LAST_LOGIN" &lt;= #{pd.lastLoginEnd}
+		</if>
+		order by u."LAST_LOGIN" desc
+	</select>
+
+	
+	<!-- 通过邮箱获取数据 -->
+	<select id="findByUE" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		"EMAIL" = #{EMAIL}
+		<if test="USERNAME != null and USERNAME != ''">
+			and "USERNAME" != #{USERNAME}
+		</if>
+	</select>
+
+	<!-- 通过编号获取数据 -->
+	<select id="findByUN" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		"NUMBER" = #{NUMBER}
+		<if test="USERNAME != null and USERNAME != ''">
+			and "USERNAME" != #{USERNAME}
+		</if>
+	</select>
+
+	<!-- 通过user_id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		"USER_ID" = #{USER_ID}
+	</select>
+
+	<!-- 新增用户 -->
+	<insert id="saveU" parameterType="pd" >
+	  <selectKey keyProperty="keyUSER_ID" resultType="String" order="BEFORE">  
+          select sys_user_seq.NEXTVAL from dual  
+      </selectKey>  
+		insert into
+		<include refid="tableName"></include>
+		(
+		USER_ID, USERNAME, UPASSWORD, UNAME, ROLE_ID,
+		<!-- LAST_LOGIN, --> LAST_IP,
+		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM, UCOMPANY,
+		UCOSTCENTER,
+		UORGANIZATION, UPOSITION, CREATETIME, INTERSTART,
+		INTERDURA,
+		<!-- LAST_CHANGE, --> OPENID, SECPOLICY
+		) values (
+		${keyUSER_ID},
+		#{USERNAME,jdbcType=VARCHAR},
+		#{UPASSWORD,jdbcType=VARCHAR},
+		#{UNAME,jdbcType=VARCHAR},
+		#{ROLE_ID,jdbcType=VARCHAR},
+		<!-- to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd'), -->
+		#{LAST_IP,jdbcType=VARCHAR},
+		#{STATUS,jdbcType=VARCHAR},
+		#{EMAIL,jdbcType=VARCHAR},
+		#{PHONE,jdbcType=VARCHAR},
+		#{UGROUP,jdbcType=VARCHAR},
+		#{UPLATFORM,jdbcType=VARCHAR},
+		#{UCOMPANY,jdbcType=VARCHAR},
+		#{UCOSTCENTER,jdbcType=VARCHAR},
+		#{UORGANIZATION,jdbcType=VARCHAR},
+		#{UPOSITION,jdbcType=VARCHAR},
+		to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd'),
+		to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd'),
+		#{INTERDURA,jdbcType=NUMERIC},
+		<!-- to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd'), -->
+		#{OPENID,jdbcType=VARCHAR},
+		#{SECPOLICY,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="editU" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set "UNAME" = #{UNAME},
+		"ROLE_ID" = #{ROLE_ID},
+		"BZ" = #{BZ},
+		"EMAIL"=#{EMAIL},
+		"NUMBER" = #{NUMBER},
+		"PHONE" = #{PHONE}
+		<if test="UPASSWORD != null and UPASSWORD != ''">
+			,"UPASSWORD" = #{UPASSWORD}
+		</if>
+		where
+		"USER_ID" = #{USER_ID}
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="deleteUserByID" parameterType="pd" flushCache="false">
+		delete from
+		<include refid="tableName"></include>
+		where
+		"USER_ID" = #{USER_ID}
+		and
+		"USER_ID" != '1'
+	</delete>
+
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllU" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		"USER_ID" in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		and
+		"USER_ID" != '1'
+	</delete>
+
+	<!-- 用户列表(全部) -->
+	<select id="listAllUser" parameterType="pd" resultType="pd">
+		select u."USER_ID",
+		u."USERNAME",
+		u."UPASSWORD" ,
+		u."LAST_LOGIN",
+		u."UNAME" ,
+		u."LAST_IP",
+		u."EMAIL",
+		u."NUMBER",
+		u."PHONE",
+		r."ROLE_ID",
+		r."ROLE_NAME"
+		from
+		<include refid="tableName"></include>
+		u,
+		<include refid="roleTableName"></include>
+		r
+		where u."ROLE_ID" = r."ROLE_ID"
+		and u."USERNAME" != 'admin'
+		and
+		r."PARENT_ID" = '1'
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			u."USERNAME" LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u."EMAIL" LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u."NUMBER" LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u."UNAME" LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u."PHONE" LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			)
+		</if>
+		<if test="ROLE_ID != null and ROLE_ID != ''"><!-- 角色检索 -->
+			and u."ROLE_ID"=#{ROLE_ID}
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u."LAST_LOGIN" &gt;= #{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u."LAST_LOGIN" &lt;= #{lastLoginEnd}
+		</if>
+		order by u."LAST_LOGIN" desc
+	</select>
+
+	<!-- 获取总数 -->
+	<select id="getUserCount" parameterType="String" resultType="pd">
+		select
+		count("USER_ID") "userCount"
+		from
+		<include refid="tableName"></include>
+	</select>
+
+</mapper>

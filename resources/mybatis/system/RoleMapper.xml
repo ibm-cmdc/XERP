@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RoleMapper">
+
+	<resultMap type="Role" id="roleResultMap">
+		<id column="ROLE_ID" property="ROLE_ID" />
+		<result column="ROLE_NAME" property="ROLE_NAME" />
+		<result column="PARENT_ID" property="PARENT_ID" />
+		<result column="RIGHTS" property="RIGHTS" />
+		<result column="ADD_QX" property="ADD_QX" />
+		<result column="DEL_QX" property="DEL_QX" />
+		<result column="EDIT_QX" property="EDIT_QX" />
+		<result column="QUR_QX" property="QUR_QX" />
+		<result column="RPLATFORM" property="RPLATFORM" />
+		<result column="ROLE_TYPE" property="ROLE_TYPE" />
+	</resultMap>
+
+	<resultMap type="Intf" id="IntfResultMap">
+		<id column="INTF_ID" property="INTF_ID" />
+		<result column="INTF_NAME" property="INTF_NAME" />
+		<result column="INTF_URL" property="INTF_URL" />
+		<result column="IPLATFORM" property="IPLATFORM" />
+	</resultMap>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		"ROLE_ID",
+		"ROLE_NAME",
+		"PARENT_ID",
+		"RIGHTS",
+		"ADD_QX",
+		"DEL_QX",
+		"EDIT_QX",
+		"QUR_QX",
+		"RPLATFORM",
+		"ROLE_TYPE"
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{ROLE_ID},
+		#{ROLE_NAME},
+		#{PARENT_ID},
+		#{RIGHTS},
+		#{ADD_QX},
+		#{DEL_QX},
+		#{EDIT_QX},
+		#{QUR_QX},
+		#{RPLATFORM},
+		#{ROLE_TYPE}
+	</sql>
+
+	<!--表名 -->
+	<sql id="tableName">
+		"SYS_ROLE"
+	</sql>
+	<select id="QueryIntfbyRoleID" parameterType="String" resultMap="IntfResultMap">
+		SELECT
+		<!-- ri."DB_ID", r."ROLE_ID", r."ROLE_NAME", r."PARENT_ID", r."RIGHTS", 
+			r."ADD_QX", r."DEL_QX", r."EDIT_QX", r."QUR_QX", r."RPLATFORM", r."ROLE_TYPE", -->
+
+		intf."INTF_ID",
+		intf."INTF_NAME",
+		intf."INTF_URL",
+		intf."IPLATFORM"
+		FROM
+		SYS_ROLE_INTF ri ,SYS_ROLE r ,SYS_INTF intf
+		WHERE
+		ri.ROLE_ID=r.ROLE_ID
+		AND ri.INTF_ID=intf.INTF_ID
+		<if test="ROLE_ID!=null and ROLE_ID!=''">
+			AND r.ROLE_ID=#{ROLE_ID}
+		</if>
+	</select>
+	<!-- 列出此组下的角色 -->
+	<select id="QueryRolesInfo" resultMap="roleResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="ROLE_ID!=null and ROLE_ID!=''">
+			and "ROLE_ID"=#{ROLE_ID}
+		</if>
+		<if test="ROLE_NAME!=null and ROLE_NAME!=''">
+			and "ROLE_NAME"=#{ROLE_NAME}
+		</if>
+		<if test="PARENT_ID!=null and PARENT_ID!=''">
+			and "PARENT_ID"=#{PARENT_ID}
+		</if>
+		<if test="RIGHTS!=null and RIGHTS!=''">
+			and "RIGHTS"=#{RIGHTS}
+		</if>
+		<if test="ADD_QX!=null and ADD_QX!=''">
+			and "ADD_QX"=#{ADD_QX}
+		</if>
+		<if test="DEL_QX!=null and DEL_QX!=''">
+			and "DEL_QX"=#{DEL_QX}
+		</if>
+		<if test="EDIT_QX!=null and EDIT_QX!=''">
+			and "EDIT_QX"=#{EDIT_QX}
+		</if>
+		<if test="QUR_QX!=null and QUR_QX!=''">
+			and "QUR_QX"=#{QUR_QX}
+		</if>
+		<if test="RPLATFORM!=null and RPLATFORM!=''">
+			and "RPLATFORM"=#{RPLATFORM}
+		</if>
+		<if test="ROLE_TYPE!=null and ROLE_TYPE!=''">
+			and "ROLE_TYPE"=#{ROLE_TYPE}
+		</if>
+		ORDER BY "ROLE_ID"
+	</select>
+
+	<!-- 保存修改 -->
+	<update id="updateRole" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		    set "ROLE_NAME"=#{ROLE_NAME}
+		<if test="PARENT_ID != null and  PARENT_ID!= ''">
+			,"PARENT_ID"=#{PARENT_ID}
+		</if>
+		<if test="RIGHTS != null and  RIGHTS!= ''">
+			,"RIGHTS"=#{RIGHTS}
+		</if>
+		<if test="ADD_QX != null and  ADD_QX!= ''">
+			,"ADD_QX"=#{ADD_QX}
+		</if>
+		<if test="DEL_QX != null and  DEL_QX!= ''">
+			,"DEL_QX"=#{DEL_QX}
+		</if>
+		<if test="EDIT_QX != null and  EDIT_QX!= ''">
+			,"EDIT_QX"=#{EDIT_QX}
+		</if>
+		<if test="QUR_QX != null and  QUR_QX!= ''">
+			,"QUR_QX"=#{QUR_QX}
+		</if>
+		<if test="RPLATFORM != null and  RPLATFORM!= ''">
+			,"RPLATFORM"=#{RPLATFORM}
+		</if>
+		<if test="ROLE_TYPE != null and  ROLE_TYPE!= ''">
+			,"ROLE_TYPE"=#{ROLE_TYPE}
+		</if>
+		where "ROLE_ID" = #{ROLE_ID}
+	</update>
+
+
+
+
+	<!-- 删除角色 -->
+	<delete id="deleteRoleById" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where "ROLE_ID"=#{ROLE_ID}
+	</delete>
+
+
+
+
+
+	<!-- 通过id查找 -->
+	<select id="findObjectById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where "ROLE_ID" = #{ROLE_ID}
+	</select>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="pd">
+		<selectKey keyProperty="keyROLE_ID" resultType="String"
+			order="BEFORE">
+			select SYS_ROLE_SEQ.NEXTVAL from dual
+		</selectKey>
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		${keyROLE_ID},
+		#{ROLE_NAME},
+		#{PARENT_ID},
+		#{RIGHTS},
+		#{ADD_QX},
+		#{DEL_QX},
+		#{EDIT_QX},
+		#{QUR_QX},
+		#{RPLATFORM},
+		#{ROLE_TYPE}
+		)
+	</insert>
+
+
+</mapper>
