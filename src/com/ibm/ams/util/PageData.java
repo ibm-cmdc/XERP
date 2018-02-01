@@ -41,7 +41,15 @@ public class PageData extends HashMap implements Map{
 			returnMap.put(name, value); 
 		}
 		map = returnMap;
+		
+		
+		String attribute = (String)request.getAttribute(Const.CURRENT_USER_ID);
+		map.put(Const.PLATFORM, attribute);
+		String auth = (String)request.getAttribute(Const.PLATFORM); 
+		map.put(Const.CURRENT_USER_ID, auth);
+		
 	}
+	
 	
 	public PageData() {
 		map = new HashMap();

@@ -83,6 +83,7 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public String getMenu(String RIGHTS,String USER_ID,String PLATFORM)throws Exception{
 		
+		
 		//缓存获取资产系统菜单 
 		AmsCache amsCache = AmsCache.getInstance();
 		Object map = amsCache.getMap("AMSMenuList");
