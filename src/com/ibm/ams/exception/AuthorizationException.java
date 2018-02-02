@@ -1,5 +1,6 @@
 package com.ibm.ams.exception;
 
+
 public class AuthorizationException extends Exception{
 
 	/**

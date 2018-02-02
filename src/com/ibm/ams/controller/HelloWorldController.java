@@ -1,5 +1,6 @@
 package com.ibm.ams.controller;
   
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import com.ibm.ams.dao.redis.queue.SubClient;
 import com.ibm.ams.entity.system.Menu;
 import com.ibm.ams.entity.token.TokenModel;
 import com.ibm.ams.exception.AMSException;
+import com.ibm.ams.exception.AuthorizationException;
 import com.ibm.ams.init.AmsCache;
 import com.ibm.ams.service.menu.MenuManager;
 import com.ibm.ams.service.token.impl.RedisTokenManager;
@@ -55,9 +57,10 @@ public class HelloWorldController extends BaseController{
 	
 	@Resource(name = "redisTokenManager")
 	private RedisTokenManager redisTokenManager;
+	
 
 	@RequestMapping(value="/hello", method = RequestMethod.GET)
-	public ModelAndView hello() throws AMSException{
+	public ModelAndView hello() throws Exception{
 		// TODO Auto-generated method stub 999
 		
 		PageData pd = new PageData();
@@ -76,14 +79,12 @@ public class HelloWorldController extends BaseController{
 //    	jmap.put("age", "22");
 //    	jmap.put("qq", "313596790");
 //		System.out.println(redisDaoImpl.addMap("fh", jmap));				//存储Map
-		
-		/*  测试异常
+		String s= null;
 		try{
-			System.out.println("获取Map:"+redisDaoImpl.getMap("fh"));
+			System.out.println("获取Map:"+s.toLowerCase());
 		}catch(Exception e){
-			throw new AMSException(e.getMessage());
+			throw new AuthorizationException(e.getMessage());
 		}
-		*/
 		
 		
 		
