@@ -7,6 +7,10 @@
 		<result column="INTF_NAME" property="INTF_NAME" />
 		<result column="INTF_URL" property="INTF_URL" />
 		<result column="IPLATFORM" property="IPLATFORM" />
+		<result column="INTF_DESC" property="INTF_DESC" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 	
 	<resultMap type="Role" id="roleResultMap">
@@ -20,6 +24,9 @@
 		<result column="QUR_QX" property="QUR_QX" />
 		<result column="RPLATFORM" property="RPLATFORM" />
 		<result column="ROLE_TYPE" property="ROLE_TYPE" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 	
 	<!--表名 -->
@@ -31,7 +38,11 @@
 		"INTF_ID",
 		"INTF_NAME",
 		"INTF_URL",
-		"IPLATFORM"
+		"IPLATFORM",
+		"INTF_DESC",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
 	</sql>
 
 	<!-- 字段值 -->
@@ -39,10 +50,14 @@
 		#{INTF_ID},
 		#{INTF_NAME},
 		#{INTF_URL},
-		#{IPLATFORM}
+		#{IPLATFORM},
+		#{INTF_DESC},
+		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT},
+		#{VER}
 	</sql>
 	
-	<select id="QueryRolebyIntfID" parameterType="String" resultMap="roleResultMap">
+	<select id="queryRolebyIntfID" parameterType="String" resultMap="roleResultMap">
 		SELECT 
                 <!-- ri."DB_ID",-->
                  r."ROLE_ID",
@@ -54,8 +69,10 @@
                  r."EDIT_QX",
                  r."QUR_QX",
                  r."RPLATFORM",
-                 r."ROLE_TYPE"
-    
+                 r."ROLE_TYPE",
+                 r."LAST_UPD_USR",
+		         r."LAST_UPD_DT",
+		         r."VER"
                 <!--  intf."INTF_ID",
                  intf."INTF_NAME",
                  intf."INTF_URL",
@@ -70,7 +87,7 @@
 	</select>
 	
 <!--通过ID获取其子一级菜单 -->
-	<select id="QueryIntf" parameterType="String" resultMap="IntfResultMap">
+	<select id="queryIntf" parameterType="String" resultMap="IntfResultMap">
 		select
 		<include refid="Field"></include>
 		from

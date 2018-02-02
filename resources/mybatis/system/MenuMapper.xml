@@ -13,6 +13,9 @@
 		<result column="MENU_TYPE" property="MENU_TYPE" />
 		<result column="MENU_STATE" property="MENU_STATE" />
 		<result column="MPLATFORM" property="MPLATFORM" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 
 	<!-- ztree -->
@@ -24,7 +27,11 @@
 		<result column="MENU_ORDER" property="MENU_ORDER" />
 		<result column="MENU_ICON" property="MENU_ICON" />
 		<result column="MENU_TYPE" property="MENU_TYPE" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 		<result column="target" property="target"></result>
+		
 	</resultMap>
 
 	<!--表名 -->
@@ -42,7 +49,10 @@
 		"MENU_ICON",
 		"MENU_TYPE",
 		"MENU_STATE",
-		"MPLATFORM"
+		"MPLATFORM",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
 	</sql>
 
 	<!-- 字段值 -->
@@ -55,7 +65,10 @@
 		#{MENU_ICON},
 		#{MENU_TYPE},
 		#{MENU_STATE},
-		#{MPLATFORM}
+		#{MPLATFORM},
+		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT},
+		#{VER}
 	</sql>
 	<sql id="MenuCconditions">
 		<if test="MENU_ID!=null and MENU_ID!=''">
@@ -85,6 +98,18 @@
 		<if test="MPLATFORM!=null and MPLATFORM!=''">
 			and "MPLATFORM"=#{MPLATFORM}
 		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			and "LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			and "LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			and "VER"={#VER}
+		</if>
+		<if test="MENUANDPARENT!=null and MENUANDPARENT!=''">
+		    and ("MENU_ID"=#{MENUANDPARENT} or "PARENT_ID"=#{MENUANDPARENT})
+		</if>
 	</sql>
 	<!--通过ID获取其子一级菜单 -->
 	<select id="listSubMenuByParentId" parameterType="String" resultMap="menuResultMap">
@@ -97,13 +122,15 @@
 	</select>
 
 	<!--通过菜单ID获取数据 -->
-	<select id="getMenuById" parameterType="pd" resultType="pd">
+	<select id="queryMenuById" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
 		from
 		<include refid="tableName"></include>
-		where "MENU_ID"=#{MENU_ID}
+		where "MENU_ID"=#{MENU_ID} 
 	</select>
+	
+	
 	
 	<!--通过菜单ID获取数据 -->
 	<select id="queryMenu" parameterType="pd" resultMap="menuResultMap">
@@ -113,28 +140,20 @@
 		<include refid="tableName"></include>
 		where 1=1
         <include refid="MenuCconditions"/>
+        order by MENU_ID
 	</select>
 	
 	<!--新增 -->
-	<insert id="insertMenu" parameterType="pd">
-		<selectKey keyProperty="keyMenu_ID" resultType="String"
-			order="BEFORE">
-			select SYS_MENU_SEQ.NEXTVAL from dual
+	<insert id="insertMenu" parameterType="pd" >
+		<selectKey keyProperty="MENU_ID" resultType="String" order="BEFORE">
+			select SYS_MENU_SEQ.NEXTVAL as MENU_ID from dual
 		</selectKey>
 		insert into
 		<include refid="tableName"></include>
 		(
-		<include refid="Field"></include>
+		<include refid="Field"></include> 
 		) values (
-		${keyMenu_ID},
-		#{MENU_NAME},
-		#{MENU_URL},
-		#{PARENT_ID},
-		#{MENU_ORDER},
-		#{MENU_ICON},
-		#{MENU_TYPE},
-		#{MENU_STATE},
-		#{MPLATFORM}
+		<include refid="FieldValue"></include> 
 		)
 	</insert>
 
@@ -192,6 +211,15 @@
 		</if>
 		<if test="MPLATFORM!=null and  MPLATFORM!=''">
 			,"MPLATFORM" =#{MPLATFORM}
+		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			,"LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			,"LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			,"VER"={#VER}
 		</if>
 		where
 		"MENU_ID"=#{MENU_ID}

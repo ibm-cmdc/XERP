@@ -14,6 +14,9 @@
 		<result column="QUR_QX" property="QUR_QX" />
 		<result column="RPLATFORM" property="RPLATFORM" />
 		<result column="ROLE_TYPE" property="ROLE_TYPE" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 
 	<resultMap type="Intf" id="IntfResultMap">
@@ -21,6 +24,10 @@
 		<result column="INTF_NAME" property="INTF_NAME" />
 		<result column="INTF_URL" property="INTF_URL" />
 		<result column="IPLATFORM" property="IPLATFORM" />
+		<result column="INTF_DESC" property="INTF_DESC" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 
 	<!-- 字段 -->
@@ -34,7 +41,10 @@
 		"EDIT_QX",
 		"QUR_QX",
 		"RPLATFORM",
-		"ROLE_TYPE"
+		"ROLE_TYPE",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
 	</sql>
 
 	<!-- 字段值 -->
@@ -48,14 +58,18 @@
 		#{EDIT_QX},
 		#{QUR_QX},
 		#{RPLATFORM},
-		#{ROLE_TYPE}
+		#{ROLE_TYPE},
+		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT},
+		#{VER}
+		
 	</sql>
 
 	<!--表名 -->
 	<sql id="tableName">
 		"SYS_ROLE"
 	</sql>
-	<select id="QueryIntfbyRoleID" parameterType="String" resultMap="IntfResultMap">
+	<select id="queryIntfbyRoleID" parameterType="String" resultMap="IntfResultMap">
 		SELECT
 		<!-- ri."DB_ID", r."ROLE_ID", r."ROLE_NAME", r."PARENT_ID", r."RIGHTS", 
 			r."ADD_QX", r."DEL_QX", r."EDIT_QX", r."QUR_QX", r."RPLATFORM", r."ROLE_TYPE", -->
@@ -63,7 +77,11 @@
 		intf."INTF_ID",
 		intf."INTF_NAME",
 		intf."INTF_URL",
-		intf."IPLATFORM"
+		intf."IPLATFORM",
+		intf."INTF_DESC",
+		intf."LAST_UPD_USR",
+		intf."LAST_UPD_DT",
+		intf."VER"
 		FROM
 		SYS_ROLE_INTF ri ,SYS_ROLE r ,SYS_INTF intf
 		WHERE
@@ -74,7 +92,7 @@
 		</if>
 	</select>
 	<!-- 列出此组下的角色 -->
-	<select id="QueryRolesInfo" resultMap="roleResultMap">
+	<select id="queryRolesInfo" resultMap="roleResultMap">
 		select
 		<include refid="Field"></include>
 		from
@@ -110,6 +128,16 @@
 		<if test="ROLE_TYPE!=null and ROLE_TYPE!=''">
 			and "ROLE_TYPE"=#{ROLE_TYPE}
 		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			and "LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			and "LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			and "VER"={#VER}
+		</if>
+		
 		ORDER BY "ROLE_ID"
 	</select>
 
@@ -142,6 +170,16 @@
 		<if test="ROLE_TYPE != null and  ROLE_TYPE!= ''">
 			,"ROLE_TYPE"=#{ROLE_TYPE}
 		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			,"LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			,"LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			,"VER"={#VER}
+		</if>
+		
 		where "ROLE_ID" = #{ROLE_ID}
 	</update>
 
@@ -153,6 +191,7 @@
 		delete from
 		<include refid="tableName"></include>
 		where "ROLE_ID"=#{ROLE_ID}
+		and "ROLE_ID" != '1'
 	</delete>
 
 
@@ -170,25 +209,16 @@
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="pd">
-		<selectKey keyProperty="keyROLE_ID" resultType="String"
+		<selectKey keyProperty="ROLE_ID" resultType="String"
 			order="BEFORE">
-			select SYS_ROLE_SEQ.NEXTVAL from dual
+			select SYS_ROLE_SEQ.NEXTVAL as ROLE_ID from dual
 		</selectKey>
 		insert into
 		<include refid="tableName"></include>
 		(
 		<include refid="Field"></include>
 		) values (
-		${keyROLE_ID},
-		#{ROLE_NAME},
-		#{PARENT_ID},
-		#{RIGHTS},
-		#{ADD_QX},
-		#{DEL_QX},
-		#{EDIT_QX},
-		#{QUR_QX},
-		#{RPLATFORM},
-		#{ROLE_TYPE}
+		<include refid="FieldValue"></include>
 		)
 	</insert>
 

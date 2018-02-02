@@ -7,6 +7,7 @@
 		<result column="BO_NAME" property="BO_NAME" />
 		<result column="BO_ID" property="BO_ID" />
 		<result column="BO_KEY" property="BO_KEY" />
+		<result column="BO_DESC" property="BO_DESC" />
 		<result column="BO_VALUE" property="BO_VALUE" />
 		<result column="ADD1" property="ADD1" />
 		<result column="ADD2" property="ADD2" />
@@ -14,7 +15,39 @@
 		<result column="ADD4" property="ADD4" />
 		<result column="ADD5" property="ADD5" />
 		<result column="BPLATFORM" property="BPLATFORM" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
+
+	<resultMap type="User" id="userResultMap">
+		<id column="USER_ID" property="USER_ID" />
+		<result column="USERNAME" property="USERNAME" />
+		<result column="UPASSWORD" property="UPASSWORD" />
+		<result column="UNAME" property="UNAME" />
+		<result column="LAST_LOGIN" property="LAST_LOGIN" />
+		<result column="LAST_IP" property="LAST_IP" />
+		<result column="STATUS" property="STATUS" />
+		<result column="EMAIL" property="EMAIL" />
+		<result column="PHONE" property="PHONE" />
+		<result column="UGROUP" property="UGROUP" />
+		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="UCOMPANY" property="UCOMPANY" />
+		<result column="UCOSTCENTER" property="UCOSTCENTER" />
+		<result column="UORGANIZATION" property="UORGANIZATION" />
+		<result column="UPOSITION" property="UPOSITION" />
+		<result column="UBPMGROUP" property="UBPMGROUP" />
+		<result column="CREATETIME" property="CREATETIME" />
+		<result column="INTERSTART" property="INTERSTART" />
+		<result column="INTERDURA" property="INTERDURA" />
+		<result column="LAST_CHANGE" property="LAST_CHANGE" />
+		<result column="OPENID" property="OPENID" />
+		<result column="SECPOLICY" property="SECPOLICY" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
+	</resultMap>
+
 	<!--表名 -->
 	<sql id="tableName">
 		"SYS_BO"
@@ -25,13 +58,17 @@
 		"BO_NAME",
 		"BO_ID",
 		"BO_KEY",
+		"BO_DESC",
 		"BO_VALUE",
 		"ADD1",
 		"ADD2",
 		"ADD3",
 		"ADD4",
 		"ADD5",
-		"BPLATFORM"
+		"BPLATFORM",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
 	</sql>
 
 	<!-- 字段值 -->
@@ -40,24 +77,150 @@
 		#{BO_NAME},
 		#{BO_ID},
 		#{BO_KEY},
+		#{BO_DESC},
 		#{BO_VALUE},
 		#{ADD1},
 		#{ADD2},
 		#{ADD3},
 		#{ADD4},
 		#{ADD5},
-		#{BPLATFORM}
+		#{BPLATFORM},
+		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT},
+		#{VER}
 	</sql>
-<!--通过ID获取其子一级菜单 -->
-	<select id="QueryBo" parameterType="String" resultMap="boResultMap">
+	<sql id="BoCconditions">
+		<if test="DB_ID!=null and DB_ID!=''">
+		    and "DB_ID"=#{DB_ID}</if>
+		<if test="BO_NAME!=null and BO_NAME!=''">
+		    and "BO_NAME"=#{BO_NAME}</if>
+		<if test="BO_ID!=null and BO_ID!=''">
+			and "BO_ID"=#{BO_ID}
+		</if>
+		<if test="BO_KEY!=null and BO_KEY!=''">
+			and "BO_KEY"=#{BO_KEY}
+		</if>
+		<if test="BO_DESC!=null and BO_DESC!=''">
+			and "BO_DESC"=#{BO_DESC}
+		</if>
+		<if test="BO_VALUE!=null and BO_VALUE!=''">
+			and "BO_VALUE"=#{BO_VALUE}
+		</if>
+		<if test="ADD1!=null and ADD1!=''">
+			and "ADD1"=#{ADD1}
+		</if>
+		<if test="ADD2!=null and ADD2!=''">
+			and "ADD2"=#{ADD2}
+		</if>
+		<if test="ADD3!=null and ADD3!=''">
+			and "ADD3"=#{ADD3}
+		</if>
+		<if test="ADD4!=null and ADD4!=''">
+			and "ADD4"=#{ADD4}
+		</if>
+		<if test="ADD5!=null and ADD5!=''">
+			and "ADD5"=#{ADD5}
+		</if>
+		<if test="BPLATFORM!=null and BPLATFORM!=''">
+			and "BPLATFORM"=#{BPLATFORM}
+		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			and "LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			and "LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			and "VER"={#VER}
+		</if>
+		<if test="BOIDORBONAME!=null and BOIDORBONAME!=''">
+		    and (("BO_ID" like '%'||#{BOIDORBONAME}||'%') or ("BO_NAME" like '%'||#{BOIDORBONAME}||'%'))
+		</if>
+	</sql>
+	<!--通过ID获取其子一级菜单 -->
+	<select id="queryBo" parameterType="String" resultMap="boResultMap">
 		select
 		<include refid="Field"></include>
 		from
 		<include refid="tableName"></include>
-		where  "DB_ID" = #{DB_ID} 
+		where "DB_ID" = #{DB_ID}
 	</select>
-<!--新增 -->
-	<insert id="insertBo" parameterType="Bo" >
+	<select id="queryBoCount" parameterType="String" resultType="pd">
+		select
+		count("DB_ID") "boCount"
+		from
+		<include refid="tableName"></include>
+	</select>
+	<select id="queryBokey" parameterType="String" resultType="pd">
+		select
+		"BO_KEY"
+		from
+		<include refid="tableName"></include>
+		group by "BO_KEY"
+	</select>
+	<select id="queryBoInfo" parameterType="String" resultMap="boResultMap">
+		select * from ( SELECT ROWNUM AS rowno, t.* FROM SYS_BO t
+		<where>
+			1=1
+			<include refid="BoCconditions" />
+			<if test="rownum != null and rownum!=''">  
+                   <![CDATA[ AND ROWNUM <=#{rownum} order by DB_ID desc]]>
+			</if>
+		</where>
+		) table_alias
+		<where>
+			<if test="rowno != null and rowno!=''">  
+         <![CDATA[table_alias.rowno >=#{rowno}]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryUserByBoidAndBP" parameterType="pd" resultMap="userResultMap">
+		SELECT U.USER_ID,
+		U.USERNAME,
+		U.UPASSWORD,
+		U.UNAME,
+		U.ROLE_ID,
+		U.LAST_LOGIN,
+		U.LAST_IP,
+		U.STATUS,
+		U.EMAIL,
+		U.PHONE,
+		U.UGROUP,
+		U.UPLATFORM,
+		U.UCOMPANY,
+		U.UCOSTCENTER,
+		U.UORGANIZATION,
+		U.UPOSITION,
+		U.UBPMGROUP,
+		U.CREATETIME,
+		U.INTERSTART,
+		U.INTERDURA,
+		U.LAST_CHANGE,
+		U.OPENID,
+		U.SECPOLICY,
+		U.LAST_UPD_USR,
+        U.LAST_UPD_DT,
+        U.VER
+		FROM
+		SYS_USER_OBJECT UO, SYS_USER
+		U,SYS_BO B
+		WHERE 1=1
+		AND
+		UO.USER_ID=U.USER_ID
+		AND UO.BO_ID=B.BO_ID
+		<if test="BO_ID!=null and  BO_ID!=''">
+			AND B.BO_ID=#{BO_ID}
+		</if>
+		<if test="BPLATFORM!=null and  BPLATFORM!=''">
+			AND B.BPLATFORM =#{BPLATFORM}
+		</if>
+	</select>
+	<!--新增 -->
+	<insert id="insertBo" parameterType="pd">
+		<selectKey keyProperty="DB_ID" resultType="String" order="BEFORE">
+			select SYS_BO_SEQ.NEXTVAL as DB_ID from dual
+		</selectKey>
 		insert into
 		<include refid="tableName"></include>
 		(
@@ -66,26 +229,55 @@
 		<include refid="FieldValue"></include>
 		)
 	</insert>
-<!--编辑 -->
-	<update id="updateBo" parameterType="Bo">
+	<!--编辑 -->
+	<update id="updateBo" parameterType="pd">
 		update
 		<include refid="tableName"></include>
 		set
-		"BO_NAME" =#{BO_NAME},
-		"BO_ID" =#{BO_ID},
-		"BO_KEY" =#{BO_KEY},
-		"BO_VALUE" =#{BO_VALUE},
-		"ADD1" =#{ADD1},
-		"ADD2" =#{ADD2},
-		"ADD3" =#{ADD3},
-		"ADD4" =#{ADD4},
-		"ADD5" =#{ADD5},
-		"BPLATFORM" =#{BPLATFORM}
-		where
-		"DB_ID"=#{DB_ID}
+		"BO_NAME" =#{BO_NAME}
+		<if test="BO_ID!=null and  BO_ID!=''">
+			,"BO_ID" =#{BO_ID}
+		</if>
+		<if test="BO_KEY!=null and  BO_KEY!=''">
+			,"BO_KEY" =#{BO_KEY}
+		</if>
+		<if test="BO_DESC!=null and  BO_DESC!=''">
+			,"BO_DESC" =#{BO_DESC}
+		</if>
+		<if test="BO_VALUE!=null and  BO_VALUE!=''">
+			,"BO_VALUE" =#{BO_VALUE}
+		</if>
+		<if test="ADD1!=null and  ADD1!=''">
+			,"ADD1" =#{ADD1}
+		</if>
+		<if test="ADD2!=null and  ADD2!=''">
+			,"ADD2" =#{ADD2}
+		</if>
+		<if test="ADD3!=null and  ADD3!=''">
+			,"ADD3" =#{ADD3}
+		</if>
+		<if test="ADD4!=null and  ADD4!=''">
+			,"ADD4" =#{ADD4}
+		</if>
+		<if test="ADD5!=null and  ADD5!=''">
+			,"ADD5" =#{ADD5}
+		</if>
+		<if test="BPLATFORM!=null and  BPLATFORM!=''">
+			,"BPLATFORM" =#{BPLATFORM}
+		</if>
+        <if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			,"LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			,"LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			,"VER"={#VER}
+		</if>
+		where "DB_ID"=#{DB_ID}
 	</update>
 
-<!--删除菜单 -->
+	<!--删除菜单 -->
 	<delete id="deleteBoById" parameterType="String">
 		delete from
 		<include refid="tableName"></include>

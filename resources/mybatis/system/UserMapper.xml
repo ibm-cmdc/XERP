@@ -19,12 +19,16 @@
 		<result column="UCOSTCENTER" property="UCOSTCENTER" />
 		<result column="UORGANIZATION" property="UORGANIZATION" />
 		<result column="UPOSITION" property="UPOSITION" />
+		<result column="UBPMGROUP" property="UBPMGROUP" />
 		<result column="CREATETIME" property="CREATETIME" />
 		<result column="INTERSTART" property="INTERSTART" />
 		<result column="INTERDURA" property="INTERDURA" />
 		<result column="LAST_CHANGE" property="LAST_CHANGE" />
 		<result column="OPENID" property="OPENID" />
 		<result column="SECPOLICY" property="SECPOLICY" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 		<association property="role" column="ROLE_ID" javaType="Role">
 			<id column="ROLE_ID" property="ROLE_ID" />
 			<result column="ROLE_NAME" property="ROLE_NAME" />
@@ -49,19 +53,24 @@
 		<result column="UCOSTCENTER" property="UCOSTCENTER" />
 		<result column="UORGANIZATION" property="UORGANIZATION" />
 		<result column="UPOSITION" property="UPOSITION" />
+		<result column="UBPMGROUP" property="UBPMGROUP" />
 		<result column="CREATETIME" property="CREATETIME" />
 		<result column="INTERSTART" property="INTERSTART" />
 		<result column="INTERDURA" property="INTERDURA" />
 		<result column="LAST_CHANGE" property="LAST_CHANGE" />
 		<result column="OPENID" property="OPENID" />
 		<result column="SECPOLICY" property="SECPOLICY" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
-	
+
 	<resultMap type="Bo" id="boResultMap">
 		<id column="DB_ID" property="DB_ID" />
 		<result column="BO_NAME" property="BO_NAME" />
 		<result column="BO_ID" property="BO_ID" />
 		<result column="BO_KEY" property="BO_KEY" />
+		<result column="BO_DESC" property="BO_DESC" />
 		<result column="BO_VALUE" property="BO_VALUE" />
 		<result column="ADD1" property="ADD1" />
 		<result column="ADD2" property="ADD2" />
@@ -69,6 +78,9 @@
 		<result column="ADD4" property="ADD4" />
 		<result column="ADD5" property="ADD5" />
 		<result column="BPLATFORM" property="BPLATFORM" />
+		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
+		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
+		<result column="VER" property="VER" />
 	</resultMap>
 
 	<!--表名 -->
@@ -81,7 +93,10 @@
 	<sql id="boTableName">
 		"SYS_BO"
 	</sql>
-	<!-- <sql id="staffTableName"> "OA_STAFF" </sql> -->
+
+	<sql id="userObjectTableName">
+		"SYS_USER_OBJECT"
+	</sql>
 
 	<!-- 字段 -->
 	<sql id="Field">
@@ -101,15 +116,19 @@
 		"UCOSTCENTER",
 		"UORGANIZATION",
 		"UPOSITION",
+		"UBPMGROUP",
 		"CREATETIME",
 		"INTERSTART",
 		"INTERDURA",
 		"LAST_CHANGE",
 		"OPENID",
-		"SECPOLICY"
+		"SECPOLICY",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
 	</sql>
-   <sql id="UserCconditions">
-        <if test="USERNAME!=null and USERNAME!=''">
+	<sql id="UserCconditions">
+		<if test="USERNAME!=null and USERNAME!=''">
 			and "USERNAME" = #{USERNAME}
 		</if>
 		<if test="PASSWORD!=null  and PASSWORD!=''">
@@ -136,34 +155,41 @@
 		<if test="UPOSITION!=null and  UPOSITION!=''">
 			and "UPOSITION"= #{UPOSITION}
 		</if>
+		<if test="UBPMGROUP!=null and  UBPMGROUP!=''">
+			and "UBPMGROUP"= #{UBPMGROUP}
+		</if>
 		<if test="OPENID!=null and  OPENID!=''">
 			and "OPENID"= #{OPENID}
 		</if>
-    </sql>
+	</sql>
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{USER_ID},
-		#{USERNAME},
-		#{UPASSWORD},
-		#{UNAME},
-		#{ROLE_ID},
+		#{USER_ID,jdbcType=NVARCHAR},
+		#{USERNAME,jdbcType=NVARCHAR},
+		#{UPASSWORD,jdbcType=NVARCHAR},
+		#{UNAME,jdbcType=NVARCHAR},
+		#{ROLE_ID,jdbcType=NVARCHAR},
 		to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd'),
-		#{LAST_IP},
-		#{STATUS},
-		#{EMAIL},
-		#{PHONE},
-		#{UGROUP},
-		#{UPLATFORM},
-		#{UCOMPANY},
-		#{UCOSTCENTER},
-		#{UORGANIZATION},
-		#{UPOSITION},
+		#{LAST_IP,jdbcType=NVARCHAR},
+		#{STATUS,jdbcType=NVARCHAR},
+		#{EMAIL,jdbcType=NVARCHAR},
+		#{PHONE,jdbcType=NVARCHAR},
+		#{UGROUP,jdbcType=NVARCHAR},
+		#{UPLATFORM,jdbcType=NVARCHAR},
+		#{UCOMPANY,jdbcType=NVARCHAR},
+		#{UCOSTCENTER,jdbcType=NVARCHAR},
+		#{UORGANIZATION,jdbcType=NVARCHAR},
+		#{UPOSITION,jdbcType=NVARCHAR},
+		#{UBPMGROUP,jdbcType=NVARCHAR},
 		to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd'),
 		to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd'),
 		#{INTERDURA,jdbcType=NUMERIC},
 		to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd'),
-		#{OPENID},
-		#{SECPOLICY}
+		#{OPENID,jdbcType=NVARCHAR},
+		#{SECPOLICY,jdbcType=NVARCHAR},
+		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT,jdbcType=NVARCHAR},
+		#{VER,jdbcType=NVARCHAR}
 	</sql>
 	<!-- 判断用户名和密码 -->
 	<select id="getUserInfo" parameterType="pd" resultType="pd">
@@ -182,37 +208,39 @@
 			and "USER_ID" = #{USER_ID}
 		</if>
 	</select>
-	<select id="queryUserInfo"  parameterType="String" resultMap="userResultMap">
+	<select id="queryUserInfo" parameterType="String" resultMap="userResultMap">
 		select
 		*
-		from 
-		    (
-		       SELECT ROWNUM AS rowno, 
-		              t.* 
-		       FROM SYS_USER t
-		       
-                <where>   1=1 
-               
-               <include refid="UserCconditions"/>
-                
-                <if test="rownum != null and rownum!=''">  
-                   <![CDATA[ AND ROWNUM <=#{rownum} order by USERNAME desc]]> 
-                </if>
-               </where>
-               
-             ) table_alias
-             
-         <where>
-         <if test="rowno != null and rowno!=''">  
-         <![CDATA[table_alias.rowno >=#{rowno}]]> 
-         </if>
-          </where>
+		from
+		(
+		SELECT ROWNUM AS rowno,
+		t.*
+		FROM SYS_USER t
+
+		<where>
+			1=1
+
+			<include refid="UserCconditions" />
+
+			<if test="rownum != null and rownum!=''">  
+                   <![CDATA[ AND ROWNUM <=#{rownum} order by USERNAME desc]]>
+			</if>
+		</where>
+
+		) table_alias
+
+		<where>
+			<if test="rowno != null and rowno!=''">  
+         <![CDATA[table_alias.rowno >=#{rowno}]]>
+			</if>
+		</where>
 	</select>
-	
-	
-	
+
+
+
 	<!-- 通过用户ID获取用户信息和角色信息 -->
-	<select id="getUserAndRoleInfo" parameterType="String" resultMap="userAndRoleResultMap">
+	<select id="getUserAndRoleInfo" parameterType="String"
+		resultMap="userAndRoleResultMap">
 		select u."USER_ID",
 		u."USERNAME",
 		u."UNAME" ,
@@ -250,6 +278,7 @@
 		B.BO_NAME,
 		B.BO_ID,
 		B.BO_KEY,
+		B.BO_DESC,
 		B.BO_VALUE,
 		B.ADD1,
 		B.ADD2,
@@ -261,7 +290,8 @@
 		U,SYS_BO B
 		WHERE 1=1
 		AND UO.USER_ID=U.USER_ID
-		AND UO.BO_ID=B.DB_ID
+		AND UO.BO_ID=B.BO_ID 
+		AND UO.BO_KEY=B.BO_KEY
 		<if test="USER_ID!=null and  USER_ID!=''">
 			AND U.USER_ID=#{USER_ID}
 		</if>
@@ -274,7 +304,7 @@
 		update
 		<include refid="tableName"></include>
 		set
-			"USERNAME"=#{USERNAME}
+		"USERNAME"=#{USERNAME}
 		<if test="UPASSWORD!=null and UPASSWORD!=''">
 			,"UPASSWORD"=#{UPASSWORD}
 		</if>
@@ -317,12 +347,15 @@
 		<if test="UPOSITION!=null and UPOSITION!=''">
 			,"UPOSITION"=#{UPOSITION}
 		</if>
+		<if test="UBPMGROUP!=null and UBPMGROUP!=''">
+			,"UBPMGROUP"=#{UBPMGROUP}
+		</if>
 		<if test="CREATETIME!=null and CREATETIME!=''">
 			,"CREATETIME"=to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd')
 		</if>
 		<if test="INTERSTART!=null and INTERSTART!=''">
-		,"INTERSTART"=to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd')
-	    </if>
+			,"INTERSTART"=to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd')
+		</if>
 		<if test="INTERDURA!=null and INTERDURA!=''">
 			,"INTERDURA"=#{INTERDURA,jdbcType=NUMERIC}
 		</if>
@@ -335,17 +368,108 @@
 		<if test="SECPOLICY!=null and SECPOLICY!=''">
 			,"SECPOLICY"=#{SECPOLICY}
 		</if>
+		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			,"LAST_UPD_USR"={#LAST_UPD_USR}
+		</if>
+		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			,"LAST_UPD_DT"={#LAST_UPD_DT}
+		</if>
+		<if test="VER!=null and VER!=''">
+			,"VER"={#VER}
+		</if>
+
 		where "USER_ID" = #{USER_ID}
 	</update>
+	<update id="updateUserAndBoRelationship" parameterType="pd">
+	    update
+		   <include refid="userObjectTableName"></include>
+		set
+		   "BO_KEY"={#BO_KEY}
+		   <if test="BO_ID!=null and BO_ID!=''">
+			,"BO_ID"={#BO_ID}
+		   </if>
+		   <if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
+			,"LAST_UPD_USR"=to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd')
+		   </if>
+		    <if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
+			,"LAST_UPD_DT"={#LAST_UPD_DT}
+		   </if>
+		   <if test="VER!=null and VER!=''">
+			,"VER"={#VER}
+		   </if>
+		 where "USER_ID"={#USER_ID}
+	</update>
+	
+	
+<!-- 新增用户 -->
+	<insert id="saveU" parameterType="pd">
+		<selectKey keyProperty="USER_ID" resultType="String" order="BEFORE">
+			select sys_user_seq.NEXTVAL as USER_ID from dual
+		</selectKey>
+		insert into
+		<include refid="tableName"></include>
+		(
+		USER_ID, USERNAME, UPASSWORD, UNAME, ROLE_ID,
+		<!-- LAST_LOGIN, -->
+		LAST_IP,
+		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM, UCOMPANY,
+		UCOSTCENTER,
+		UORGANIZATION, UPOSITION, 
+		UBPMGROUP,
+		CREATETIME, INTERSTART,
+		INTERDURA,
+		<!-- LAST_CHANGE, -->
+		OPENID, SECPOLICY
+		) values (
+		#{USER_ID},
+		#{USERNAME,jdbcType=NVARCHAR},
+		#{UPASSWORD,jdbcType=NVARCHAR},
+		#{UNAME,jdbcType=NVARCHAR},
+		#{ROLE_ID,jdbcType=NVARCHAR},
+		<!-- to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd'), -->
+		#{LAST_IP,jdbcType=NVARCHAR},
+		#{STATUS,jdbcType=NVARCHAR},
+		#{EMAIL,jdbcType=NVARCHAR},
+		#{PHONE,jdbcType=NVARCHAR},
+		#{UGROUP,jdbcType=NVARCHAR},
+		#{UPLATFORM,jdbcType=NVARCHAR},
+		#{UCOMPANY,jdbcType=NVARCHAR},
+		#{UCOSTCENTER,jdbcType=NVARCHAR},
+		#{UORGANIZATION,jdbcType=NVARCHAR},
+		#{UPOSITION,jdbcType=NVARCHAR},
+		#{UBPMGROUP,jdbcType=NVARCHAR},
+		to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd'),
+		to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd'),
+		#{INTERDURA,jdbcType=NUMERIC},
+		<!-- to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd'), -->
+		#{OPENID,jdbcType=NVARCHAR},
+		#{SECPOLICY,jdbcType=NVARCHAR}
+		)
+	</insert>
 
-
-
-
-
-
-
-
-
+	<insert id="insertUB" parameterType="pd">
+		<selectKey keyProperty="DB_ID" resultType="String" order="BEFORE">
+			select SYS_USEROBJECT_SEQ.NEXTVAL as DB_ID from dual
+		</selectKey>
+		insert into 
+		<include refid="userObjectTableName"></include>
+		("DB_ID",
+		"USER_ID",
+		"BO_ID",
+		"BO_KEY",
+		<!-- "LAST_UPD_USR",
+		"LAST_UPD_DT", -->
+		"VER")
+		values (
+		#{DB_ID,jdbcType=NVARCHAR},
+		#{USER_ID,jdbcType=NVARCHAR},
+		#{BO_ID,jdbcType=NVARCHAR},
+		#{BO_KEY,jdbcType=NVARCHAR},
+		<!-- to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		#{LAST_UPD_DT,jdbcType=NVARCHAR}, -->
+		#{VER,jdbcType=NVARCHAR}
+		)
+	</insert>
 
 
 
@@ -353,8 +477,7 @@
 	<update id="updateLastLogin" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set
-		"LAST_LOGIN" = #{LAST_LOGIN}
+		set "LAST_LOGIN" = #{LAST_LOGIN}
 		where "USER_ID" = #{USER_ID}
 	</update>
 
@@ -461,7 +584,7 @@
 		order by u."LAST_LOGIN" desc
 	</select>
 
-	
+
 	<!-- 通过邮箱获取数据 -->
 	<select id="findByUE" parameterType="pd" resultType="pd">
 		select
@@ -498,63 +621,7 @@
 		"USER_ID" = #{USER_ID}
 	</select>
 
-	<!-- 新增用户 -->
-	<insert id="saveU" parameterType="pd" >
-	  <selectKey keyProperty="keyUSER_ID" resultType="String" order="BEFORE">  
-          select sys_user_seq.NEXTVAL from dual  
-      </selectKey>  
-		insert into
-		<include refid="tableName"></include>
-		(
-		USER_ID, USERNAME, UPASSWORD, UNAME, ROLE_ID,
-		<!-- LAST_LOGIN, --> LAST_IP,
-		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM, UCOMPANY,
-		UCOSTCENTER,
-		UORGANIZATION, UPOSITION, CREATETIME, INTERSTART,
-		INTERDURA,
-		<!-- LAST_CHANGE, --> OPENID, SECPOLICY
-		) values (
-		${keyUSER_ID},
-		#{USERNAME,jdbcType=VARCHAR},
-		#{UPASSWORD,jdbcType=VARCHAR},
-		#{UNAME,jdbcType=VARCHAR},
-		#{ROLE_ID,jdbcType=VARCHAR},
-		<!-- to_date(#{LAST_LOGIN,jdbcType=DATE},'yyyy-mm-dd'), -->
-		#{LAST_IP,jdbcType=VARCHAR},
-		#{STATUS,jdbcType=VARCHAR},
-		#{EMAIL,jdbcType=VARCHAR},
-		#{PHONE,jdbcType=VARCHAR},
-		#{UGROUP,jdbcType=VARCHAR},
-		#{UPLATFORM,jdbcType=VARCHAR},
-		#{UCOMPANY,jdbcType=VARCHAR},
-		#{UCOSTCENTER,jdbcType=VARCHAR},
-		#{UORGANIZATION,jdbcType=VARCHAR},
-		#{UPOSITION,jdbcType=VARCHAR},
-		to_date(#{CREATETIME,jdbcType=DATE},'yyyy-mm-dd'),
-		to_date(#{INTERSTART,jdbcType=DATE},'yyyy-mm-dd'),
-		#{INTERDURA,jdbcType=NUMERIC},
-		<!-- to_date(#{LAST_CHANGE,jdbcType=DATE},'yyyy-mm-dd'), -->
-		#{OPENID,jdbcType=VARCHAR},
-		#{SECPOLICY,jdbcType=VARCHAR}
-		)
-	</insert>
-
-	<!-- 修改 -->
-	<update id="editU" parameterType="pd">
-		update
-		<include refid="tableName"></include>
-		set "UNAME" = #{UNAME},
-		"ROLE_ID" = #{ROLE_ID},
-		"BZ" = #{BZ},
-		"EMAIL"=#{EMAIL},
-		"NUMBER" = #{NUMBER},
-		"PHONE" = #{PHONE}
-		<if test="UPASSWORD != null and UPASSWORD != ''">
-			,"UPASSWORD" = #{UPASSWORD}
-		</if>
-		where
-		"USER_ID" = #{USER_ID}
-	</update>
+	
 
 	<!-- 删除用户 -->
 	<delete id="deleteUserByID" parameterType="pd" flushCache="false">
