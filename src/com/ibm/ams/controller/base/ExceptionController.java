@@ -16,7 +16,7 @@ public class ExceptionController extends BaseController{
 	@ResponseBody
 	public String handleException(Exception ex){
 		JSONObject rspJson = new JSONObject();
-		try {
+		try { 
 			rspJson.put(Const.RESULT_CODE, "401");
 			rspJson.put(Const.RESULT_MSG, "用户无权限！");
 		} catch (JSONException e) {
