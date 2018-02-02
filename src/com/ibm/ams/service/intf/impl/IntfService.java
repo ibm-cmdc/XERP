@@ -20,7 +20,7 @@ public class IntfService implements IntfManager{
 	@SuppressWarnings("unchecked")
 	public List<Intf> QueryIntf(PageData pd) throws Exception {
 		// TODO Auto-generated method stub
-		return (List<Intf>) dao.findForList("IntfMapper.QueryIntf", pd);
+		return (List<Intf>) dao.findForList("IntfMapper.queryIntf", pd);
 	}
 
 	public void CreateIntf(Intf intf) throws Exception {
@@ -39,10 +39,9 @@ public class IntfService implements IntfManager{
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<Role> QueryRolebyIntfID(PageData pd) throws Exception {
 		// TODO Auto-generated method stub
-		return (List<Role>) dao.findForList("IntfMapper.QueryRolebyIntfID", pd);
+		return (List<Role>) dao.findForList("IntfMapper.queryRolebyIntfID", pd);
 	}
 
 }

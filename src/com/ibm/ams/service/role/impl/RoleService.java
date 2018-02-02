@@ -26,7 +26,7 @@ public class RoleService implements RoleManager{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Role> queryRoleInfo(PageData pd) throws Exception {
-		return (List<Role>) dao.findForList("RoleMapper.QueryRolesInfo", pd);
+		return (List<Role>) dao.findForList("RoleMapper.queryRolesInfo", pd);
 	}
     
 	/**通过id查找
@@ -68,9 +68,9 @@ public class RoleService implements RoleManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Intf> QueryIntfbyRoleID(PageData pd) throws Exception {
+	public List<Intf> queryIntfbyRoleID(PageData pd) throws Exception {
 		// TODO Auto-generated method stub
-		return (List<Intf>) dao.findForList("RoleMapper.QueryIntfbyRoleID", pd);
+		return (List<Intf>) dao.findForList("RoleMapper.queryIntfbyRoleID", pd);
 	}
 
 

@@ -15,6 +15,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSONArray;
+
 public class Tools {
 	
 	/**
@@ -278,6 +280,8 @@ public class Tools {
 		System.out.println(getRandomNum());
 		String [] a={"1"};
 		System.out.println(toString(a));
+		JSONArray arr = JSONArray.fromObject("[]");
+		System.out.println(arr.toString());
 	}
 	
 }

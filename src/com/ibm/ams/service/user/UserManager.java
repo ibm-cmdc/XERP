@@ -31,6 +31,14 @@ public interface UserManager {
 	 * @throws Exception
 	 */
 	public int updateUser(PageData pd)throws Exception;
+	
+	/**
+	 * 根据用户ID,更改权限关系
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateUserAndBoRelationship(PageData pd)throws Exception;
 	/**
 	 * 根据名称和密码查询用户和用户角色
 	 * @param pd
@@ -52,7 +60,13 @@ public interface UserManager {
 	 */
 	public int saveU(PageData pd)throws Exception;
 	
-	
+	/**
+	 * 保存用户和权限的关系
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertUB(PageData pd)throws Exception;
 	
 	
 	
@@ -124,12 +138,6 @@ public interface UserManager {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd)throws Exception;
-	
-	/**修改用户
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void editU(PageData pd)throws Exception;
 	
 
 	/**删除用户

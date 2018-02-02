@@ -22,13 +22,17 @@ public class User {
 	private String UCOSTCENTER; // 成本中心
 	private String UORGANIZATION;// 组织单元
 	private String UPOSITION; // 职位
+	private String UBPMGROUP; // BPM岗位
 	private String CREATETIME; // 创建时间
 	private String INTERSTART; // 有效期开始
 	private String INTERDURA; // 有效期间
 	private String LAST_CHANGE; // 最后修改日期
 	private String OPENID; // 微信公众号ID
 	private String SECPOLICY; // 密码策略
-	private String TOKEN; //
+	private String LAST_UPD_USR;//最后修改时间
+	private String LAST_UPD_DT;//最后修改人
+	private String VER;//版本号
+	private String TOKEN; //head中的token
 
 	private Role role; // 角色对象
 	private Page page; // 分页对象
@@ -161,6 +165,13 @@ public class User {
 	public void setUPOSITION(String uPOSITION) {
 		UPOSITION = uPOSITION;
 	}
+	public String getUBPMGROUP() {
+		return UBPMGROUP;
+	}
+
+	public void setUBPMGROUP(String uBPMGROUP) {
+		this.UBPMGROUP = uBPMGROUP;
+	}
 
 
 	public String getCREATETIME() {
@@ -234,6 +245,30 @@ public class User {
 	}
 
 	public void setTOKEN(String tOKEN) {
-		TOKEN = tOKEN;
+		this.TOKEN = tOKEN;
 	}
+	public String getLAST_UPD_USR() {
+		return LAST_UPD_USR;
+	}
+
+	public void setLAST_UPD_USR(String lAST_UPD_USR) {
+		this.LAST_UPD_USR = lAST_UPD_USR;
+	}
+
+	public String getLAST_UPD_DT() {
+		return LAST_UPD_DT;
+	}
+
+	public void setLAST_UPD_DT(String lAST_UPD_DT) {
+		this.LAST_UPD_DT = lAST_UPD_DT;
+	}
+
+	public String getVER() {
+		return VER;
+	}
+
+	public void setVER(String vER) {
+		this.VER = vER;
+	}
+
 }

@@ -23,7 +23,8 @@ public interface RoleManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Intf> QueryIntfbyRoleID(PageData pd) throws Exception;
+	public List<Intf> queryIntfbyRoleID(PageData pd) throws Exception;
+	
 	
 	/**通过id查找
 	 * @param pd

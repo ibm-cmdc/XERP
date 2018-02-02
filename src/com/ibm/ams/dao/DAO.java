@@ -46,7 +46,13 @@ public interface DAO {
 	 * @throws Exception
 	 */
 	public Object findForList(String str, Object obj) throws Exception;
-	
+	/**
+	 * 查找对象
+	 * @param str
+	 * @return
+	 * @throws Exception
+	 */
+	public Object findForList(String str) throws Exception;
 	/**
 	 * 查找对象封装成Map
 	 * @param s

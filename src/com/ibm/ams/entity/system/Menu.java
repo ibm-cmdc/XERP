@@ -2,8 +2,6 @@ package com.ibm.ams.entity.system;
 
 import java.util.List;
 
-import com.ibm.ams.entity.Page;
-
 /**
  * 菜单主表
  */
@@ -18,6 +16,9 @@ public class Menu {
 	private String MENU_TYPE; // 菜单类型
 	private String MENU_STATE; // 菜单状态
 	private String MPLATFORM; // 系统平台
+	private String LAST_UPD_USR;//最后修改时间
+	private String LAST_UPD_DT;//最后修改人
+	private String VER;//版本号
 	private String target;
 	
 	private Menu parentMenu;
@@ -30,7 +31,7 @@ public class Menu {
 	}
 
 	public void setMENU_ID(String mENU_ID) {
-		MENU_ID = mENU_ID;
+		this.MENU_ID = mENU_ID;
 	}
 
 	public String getMENU_NAME() {
@@ -38,7 +39,7 @@ public class Menu {
 	}
 
 	public void setMENU_NAME(String mENU_NAME) {
-		MENU_NAME = mENU_NAME;
+		this.MENU_NAME = mENU_NAME;
 	}
 
 	public String getMENU_URL() {
@@ -46,7 +47,7 @@ public class Menu {
 	}
 
 	public void setMENU_URL(String mENU_URL) {
-		MENU_URL = mENU_URL;
+		this.MENU_URL = mENU_URL;
 	}
 
 	public String getPARENT_ID() {
@@ -54,7 +55,7 @@ public class Menu {
 	}
 
 	public void setPARENT_ID(String pARENT_ID) {
-		PARENT_ID = pARENT_ID;
+		this.PARENT_ID = pARENT_ID;
 	}
 
 	public String getMENU_ORDER() {
@@ -62,7 +63,7 @@ public class Menu {
 	}
 
 	public void setMENU_ORDER(String mENU_ORDER) {
-		MENU_ORDER = mENU_ORDER;
+		this.MENU_ORDER = mENU_ORDER;
 	}
 
 	public Menu getParentMenu() {
@@ -102,7 +103,7 @@ public class Menu {
 	}
 
 	public void setMENU_ICON(String mENU_ICON) {
-		MENU_ICON = mENU_ICON;
+		this.MENU_ICON = mENU_ICON;
 	}
 
 	public String getMENU_TYPE() {
@@ -110,7 +111,7 @@ public class Menu {
 	}
 
 	public void setMENU_TYPE(String mENU_TYPE) {
-		MENU_TYPE = mENU_TYPE;
+		this.MENU_TYPE = mENU_TYPE;
 	}
 
 	public String getMENU_STATE() {
@@ -118,7 +119,7 @@ public class Menu {
 	}
 
 	public void setMENU_STATE(String mENU_STATE) {
-		MENU_STATE = mENU_STATE;
+		this.MENU_STATE = mENU_STATE;
 	}
 
 	public String getMPLATFORM() {
@@ -126,7 +127,30 @@ public class Menu {
 	}
 
 	public void setMPLATFORM(String mPLATFORM) {
-		MPLATFORM = mPLATFORM;
+		this.MPLATFORM = mPLATFORM;
+	}
+	public String getLAST_UPD_USR() {
+		return LAST_UPD_USR;
+	}
+
+	public void setLAST_UPD_USR(String lAST_UPD_USR) {
+		this.LAST_UPD_USR = lAST_UPD_USR;
+	}
+
+	public String getLAST_UPD_DT() {
+		return LAST_UPD_DT;
+	}
+
+	public void setLAST_UPD_DT(String lAST_UPD_DT) {
+		this.LAST_UPD_DT = lAST_UPD_DT;
+	}
+
+	public String getVER() {
+		return VER;
+	}
+
+	public void setVER(String vER) {
+		this.VER = vER;
 	}
 
 }

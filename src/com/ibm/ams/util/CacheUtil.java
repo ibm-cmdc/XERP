@@ -43,11 +43,17 @@ public class CacheUtil {
 	public static List<Menu> getDeleMenuByListMenu(List<Menu> allmenuList,String menu_id){
 //		Menu menuBean=null;
 		Iterator<Menu> iter = allmenuList.iterator();
+		int menuSize = allmenuList.size();
 		while (iter.hasNext()) {
             Menu menu = iter.next();
             String menu_ID2 = menu.getMENU_ID();
 			boolean hasMenu = menu.isHasMenu();
             if (menu_ID2.equals(menu_id)) {
+            	if (1<menuSize) {
+				}else{
+					menu.setHasMenu(false);
+					menu.setSubMenu(null);
+				}
                 iter.remove();
             }else{
             	if (hasMenu) {
@@ -153,11 +159,17 @@ public class CacheUtil {
 		for (int a = 0; a < arr.length; a++) {
 			String menu_id = arr[a];
 			Iterator<Menu> iter = allmenuList.iterator();
+			int menuSize = allmenuList.size();
 			while (iter.hasNext()) {
 	            Menu menu = iter.next();
 	            String menu_ID2 = menu.getMENU_ID();
 				boolean hasMenu = menu.isHasMenu();
 	            if (menu_ID2.equals(menu_id)) {
+	            	if (1<menuSize) {
+					}else{
+						menu.setHasMenu(false);
+						menu.setSubMenu(null);
+					}
 	                iter.remove();
 	            }else{
 	            	if (hasMenu) {

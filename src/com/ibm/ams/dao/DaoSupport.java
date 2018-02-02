@@ -119,6 +119,10 @@ public class DaoSupport implements DAO {
 	public Object findForList(String str, Object obj) throws Exception {
 		return sqlSessionTemplate.selectList(str, obj);
 	}
+	public Object findForList(String str) throws Exception {
+		return sqlSessionTemplate.selectList(str);
+	}
+	
 	
 	public Object findForMap(String str, Object obj, String key, String value) throws Exception {
 		return sqlSessionTemplate.selectMap(str, obj, key);

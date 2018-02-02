@@ -44,7 +44,7 @@ public class MenuService implements MenuManager{
 	 * @throws Exception
 	 */
 	public PageData getMenuById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("MenuMapper.getMenuById", pd);
+		return (PageData) dao.findForObject("MenuMapper.queryMenuById", pd);
 	}
 	
 	/**

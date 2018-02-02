@@ -40,7 +40,10 @@ public class UserService implements UserManager{
 		// TODO Auto-generated method stub
 		return (int)dao.update("UserMapper.updateUser", pd);
 	}
-	
+	public int updateUserAndBoRelationship(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return (int)dao.update("UserMapper.updateUserAndBoRelationship", pd);
+	}
 	@SuppressWarnings("unchecked")
 	public List<User> queryUserInfo(PageData pd) throws Exception {
 		// TODO Auto-generated method stub
@@ -54,6 +57,16 @@ public class UserService implements UserManager{
 		return (int) dao.save("UserMapper.saveU", pd);
 	}
 	
+	/**
+	 * 保存用户和权限的关系
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertUB(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return (int) dao.save("UserMapper.insertUB", pd);
+	}
 	
 	
 	
@@ -163,14 +176,6 @@ public class UserService implements UserManager{
 	}
 	
 	
-	 
-	/**修改用户
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void editU(PageData pd)throws Exception{
-		dao.update("UserMapper.editU", pd);
-	}
 
 	
 
@@ -206,6 +211,10 @@ public class UserService implements UserManager{
 	public PageData getUserCount(String value)throws Exception{
 		return (PageData)dao.findForObject("UserMapper.getUserCount", value);
 	}
+
+	
+
+	
 
 	
 	

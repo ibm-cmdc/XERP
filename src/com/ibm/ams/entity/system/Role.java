@@ -16,6 +16,17 @@ public class Role {
 	private String QUR_QX; // 查询功能
 	private String RPLATFORM; // 系统平台
 	private String ROLE_TYPE; // 角色类型
+	private String LAST_UPD_USR;//最后修改时间
+	private String LAST_UPD_DT;//最后修改人
+	private String VER;//版本号
+	private boolean flag;//标示
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
 
 	private Page page; // 分页对象
 
@@ -34,7 +45,7 @@ public class Role {
 	}
 
 	public void setROLE_ID(String rOLE_ID) {
-		ROLE_ID = rOLE_ID;
+		this.ROLE_ID = rOLE_ID;
 	}
 
 	public String getROLE_NAME() {
@@ -42,7 +53,7 @@ public class Role {
 	}
 
 	public void setROLE_NAME(String rOLE_NAME) {
-		ROLE_NAME = rOLE_NAME;
+		this.ROLE_NAME = rOLE_NAME;
 	}
 
 	public String getRIGHTS() {
@@ -50,7 +61,7 @@ public class Role {
 	}
 
 	public void setRIGHTS(String rIGHTS) {
-		RIGHTS = rIGHTS;
+		this.RIGHTS = rIGHTS;
 	}
 
 	public String getPARENT_ID() {
@@ -58,7 +69,7 @@ public class Role {
 	}
 
 	public void setPARENT_ID(String pARENT_ID) {
-		PARENT_ID = pARENT_ID;
+		this.PARENT_ID = pARENT_ID;
 	}
 
 	public String getADD_QX() {
@@ -66,7 +77,7 @@ public class Role {
 	}
 
 	public void setADD_QX(String aDD_QX) {
-		ADD_QX = aDD_QX;
+		this.ADD_QX = aDD_QX;
 	}
 
 	public String getDEL_QX() {
@@ -74,7 +85,7 @@ public class Role {
 	}
 
 	public void setDEL_QX(String dEL_QX) {
-		DEL_QX = dEL_QX;
+		this.DEL_QX = dEL_QX;
 	}
 
 	public String getEDIT_QX() {
@@ -82,7 +93,7 @@ public class Role {
 	}
 
 	public void setEDIT_QX(String eDIT_QX) {
-		EDIT_QX = eDIT_QX;
+		this.EDIT_QX = eDIT_QX;
 	}
 
 	public String getQUR_QX() {
@@ -90,7 +101,7 @@ public class Role {
 	}
 
 	public void setQUR_QX(String qUR_QX) {
-		QUR_QX = qUR_QX;
+		this.QUR_QX = qUR_QX;
 	}
 
 	public String getRPLATFORM() {
@@ -98,7 +109,7 @@ public class Role {
 	}
 
 	public void setRPLATFORM(String rPLATFORM) {
-		RPLATFORM = rPLATFORM;
+		this.RPLATFORM = rPLATFORM;
 	}
 
 
@@ -107,7 +118,30 @@ public class Role {
 	}
 
 	public void setROLE_TYPE(String rOLE_TYPE) {
-		ROLE_TYPE = rOLE_TYPE;
+		this.ROLE_TYPE = rOLE_TYPE;
+	}
+	public String getLAST_UPD_USR() {
+		return LAST_UPD_USR;
+	}
+
+	public void setLAST_UPD_USR(String lAST_UPD_USR) {
+		this.LAST_UPD_USR = lAST_UPD_USR;
+	}
+
+	public String getLAST_UPD_DT() {
+		return LAST_UPD_DT;
+	}
+
+	public void setLAST_UPD_DT(String lAST_UPD_DT) {
+		this.LAST_UPD_DT = lAST_UPD_DT;
+	}
+
+	public String getVER() {
+		return VER;
+	}
+
+	public void setVER(String vER) {
+		this.VER = vER;
 	}
 
 }
