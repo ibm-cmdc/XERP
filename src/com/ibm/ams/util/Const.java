@@ -8,7 +8,7 @@ public class Const {
 	//接口header
 	public static final String AUTHORIZATION = "token";   //header权限标识
 	public static final String CURRENT_USER_ID = "userid";  //request当前用户 / header用户标识
-	public static final String PLATFORM = "platform";  //header系统平台标识
+	public static final String PLATFORM = "PLATFORM";  //header系统平台标识
 	
 	
 	//接口返回
