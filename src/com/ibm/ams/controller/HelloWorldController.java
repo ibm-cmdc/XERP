@@ -46,7 +46,7 @@ import org.springframework.stereotype.Controller;
 public class HelloWorldController extends BaseController{
 	
 	@Resource(name="PrintService")
-	private Print ps;
+	private Print ps; 
 	@Resource(name="userService")
 	private UserManager userService;
 	@Resource(name="menuService")
