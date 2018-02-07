@@ -29,7 +29,13 @@ public interface BoManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData>  QueryBokey()throws Exception;
+	public List<PageData>  queryBokey()throws Exception;
+	/**
+	 * 分组查询BO_TYPE
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData>  queryBoType()throws Exception;
 	/**
 	 * 分页查询数据
 	 * @param pd

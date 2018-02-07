@@ -15,7 +15,12 @@ public interface MenuManager {
 	 * @throws Exception
 	 */
 	public List<Menu> listSubMenuByParentId(String parentId)throws Exception;
-	
+	/**
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Menu> queryMenu(PageData pd) throws Exception;
 	/**
 	 * @param pd

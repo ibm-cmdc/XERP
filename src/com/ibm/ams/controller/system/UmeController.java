@@ -2,6 +2,7 @@ package com.ibm.ams.controller.system;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -91,14 +92,13 @@ public class UmeController extends BaseController {
 	public String queryBo() throws Exception {
 		PageData pd = getPageData();
 		JSONObject rspJson = new JSONObject();
-		List<Bo> queryBo = this.boService.queryBo(pd);
+		List<Bo> queryBo = boService.queryBo(pd);
+		JSONArray arr = JSONArray.fromObject(queryBo);
 		if (queryBo != null) {
-			JSONArray arr = JSONArray.fromObject(queryBo);
 			rspJson.put("LISTBO", arr);
 			rspJson.put("TYPE", "S");
 			rspJson.put("MESSAGE", "查询权限信息成功!");
 		} else {
-			JSONArray arr = JSONArray.fromObject("");
 			rspJson.put("LISTBO", arr);
 			rspJson.put("TYPE", "E");
 			rspJson.put("MESSAGE", "查询权限信息失败!");
@@ -150,21 +150,41 @@ public class UmeController extends BaseController {
 	@ResponseBody
 	public String queryBokey() throws Exception {
 		JSONObject rspJson = new JSONObject();
-		List<PageData> queryBokey = boService.QueryBokey();
+		List<PageData> queryBokey = boService.queryBokey();
+		JSONArray arr = JSONArray.fromObject(queryBokey);
 		if (null != queryBokey) {
-			JSONArray arr = JSONArray.fromObject(queryBokey);
 			rspJson.put("LISTBOKEY", arr);
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "查询权限key对象信息成功!");
 		} else {
-			JSONArray arr = JSONArray.fromObject("[]");
 			rspJson.put("LISTBOKEY", arr);
 			rspJson.put(Const.RESULT_CODE, "E");
 			rspJson.put(Const.RESULT_MSG, "查询权限key对象信息失败!");
 		}
 		return rspJson.toString();
 	}
-
+	/**
+	 * 获取类型
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/queryBoType", method = RequestMethod.GET)
+	@ResponseBody
+	public String queryBoType() throws Exception {
+		JSONObject rspJson = new JSONObject();
+		List<PageData> queryBoType = boService.queryBoType();
+		JSONArray arr = JSONArray.fromObject(queryBoType);
+		if (null != queryBoType) {
+			rspJson.put("LISTBOTYPE", arr);
+			rspJson.put(Const.RESULT_CODE, "S");
+			rspJson.put(Const.RESULT_MSG, "查询权限Type对象信息成功!");
+		} else {
+			rspJson.put("LISTBOTYPE", arr);
+			rspJson.put(Const.RESULT_CODE, "E");
+			rspJson.put(Const.RESULT_MSG, "查询权限Type对象信息失败!");
+		}
+		return rspJson.toString();
+	}
 	/**
 	 * 根据用户查询Bo信息
 	 * 
@@ -177,13 +197,12 @@ public class UmeController extends BaseController {
 		PageData pd = this.getPageData();
 		JSONObject rspJson = new JSONObject();
 		List<Bo> queryBoByUidUpa = userService.queryBoByUidUpa(pd);
+		JSONArray arr = JSONArray.fromObject(queryBoByUidUpa);
 		if (null != queryBoByUidUpa) {
-			JSONArray arr = JSONArray.fromObject(queryBoByUidUpa);
 			rspJson.put("LISTBO", arr);
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "查询权限信息成功!");
 		} else {
-			JSONArray arr = JSONArray.fromObject("[]");
 			rspJson.put("LISTBO", arr);
 			rspJson.put(Const.RESULT_CODE, "E");
 			rspJson.put(Const.RESULT_MSG, "查询权限信息失败!");
@@ -203,13 +222,12 @@ public class UmeController extends BaseController {
 		PageData pd = this.getPageData();
 		JSONObject rspJson = new JSONObject();
 		List<User> queryUserByBoidAndBP = boService.queryUserByBoidAndBP(pd);
+		JSONArray arr = JSONArray.fromObject(queryUserByBoidAndBP);
 		if (null != queryUserByBoidAndBP) {
-			JSONArray arr = JSONArray.fromObject(queryUserByBoidAndBP);
 			rspJson.put("LISTUSER", arr);
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "查询用户信息成功!");
 		} else {
-			JSONArray arr = JSONArray.fromObject("[]");
 			rspJson.put("LISTUSER", arr);
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "查询用户信息成功!");
@@ -231,8 +249,7 @@ public class UmeController extends BaseController {
 		JSONObject rspJson = new JSONObject();
 		List<Role> listAllRolesByRIdPa = roleService.queryRoleInfo(pd);
 		JSONArray arr = JSONArray.fromObject(listAllRolesByRIdPa);
-		JSONArray arr_null = JSONArray.fromObject("[]");
-		if (null != listAllRolesByRIdPa || "".equals(listAllRolesByRIdPa)) {
+		if (null != listAllRolesByRIdPa && !"".equals(listAllRolesByRIdPa)) {
 			int size = listAllRolesByRIdPa.size();
 			if (0 < size) {
 				rspJson.put(Const.RESULT_CODE, "S");
@@ -240,12 +257,12 @@ public class UmeController extends BaseController {
 				rspJson.put(Const.RESULT_MSG, "查询角色信息成功,共" + size + "!");
 			} else {
 				rspJson.put(Const.RESULT_CODE, "W");
-				rspJson.put("LISTROLEINFO", arr_null);
+				rspJson.put("LISTROLEINFO", arr);
 				rspJson.put(Const.RESULT_MSG, "查询角色信息成功,共" + size + "!");
 			}
 		} else {
 			rspJson.put(Const.RESULT_CODE, "E");
-			rspJson.put("LISTROLEINFO", arr_null);
+			rspJson.put("LISTROLEINFO", arr);
 			rspJson.put(Const.RESULT_MSG, "查询角色信息失败!");
 		}
 		return rspJson.toString();
@@ -263,22 +280,22 @@ public class UmeController extends BaseController {
 		PageData pd = this.getPageData();
 		JSONObject rspJson = new JSONObject();
 		PageData roleBean = roleService.findObjectById(pd);
-		if (null != roleBean || "".equals(roleBean)) {
+		if (null != roleBean && !"".equals(roleBean)) {
 			String rights = (String) roleBean.get("RIGHTS");
 			String role_Name = (String) roleBean.get("ROLE_NAME");
 			String menu = "";
 			if (null != rights) {
 				menu = CacheUtil.getMenuListID(rights, "AMSMenuList");
 			}
+			
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put("ROLE_NAME", role_Name);
 			rspJson.put("LISTMENUINFO", menu);
 			rspJson.put(Const.RESULT_MSG, "根据角色序号查询菜单信息成功!");
 		} else {
-			JSONArray arr_null = JSONArray.fromObject("[]");
 			rspJson.put(Const.RESULT_CODE, "E");
 			rspJson.put("ROLE_NAME", "");
-			rspJson.put("LISTMENUINFO", arr_null);
+			rspJson.put("LISTMENUINFO", "");
 			rspJson.put(Const.RESULT_MSG, "根据角色序号未查询到角色的信息!");
 		}
 		return rspJson.toString();
@@ -288,11 +305,11 @@ public class UmeController extends BaseController {
 	@ResponseBody
 	public String queryMenu() throws Exception {
 		PageData pd = this.getPageData();
+		
 		JSONObject rspJson = new JSONObject();
 		List<Menu> queryMenu = menuService.queryMenu(pd);
 		JSONArray arr = JSONArray.fromObject(queryMenu);
-		JSONArray arr_null = JSONArray.fromObject("[]");
-		if (null != queryMenu || "".equals(queryMenu)) {
+		if (null != queryMenu && !"".equals(queryMenu)) {
 			int size = queryMenu.size();
 			if (0 < size) {
 				rspJson.put(Const.RESULT_CODE, "S");
@@ -300,12 +317,12 @@ public class UmeController extends BaseController {
 				rspJson.put(Const.RESULT_MSG, "查询菜单信息成功,共" + size + "!");
 			} else {
 				rspJson.put(Const.RESULT_CODE, "W");
-				rspJson.put("LISTMENUINFO", arr_null);
+				rspJson.put("LISTMENUINFO", arr);
 				rspJson.put(Const.RESULT_MSG, "查询菜单信息成功,共" + size + "!");
 			}
 		} else {
 			rspJson.put(Const.RESULT_CODE, "E");
-			rspJson.put("LISTMENUINFO", arr_null);
+			rspJson.put("LISTMENUINFO", arr);
 			rspJson.put(Const.RESULT_MSG, "查询菜单信息失败!");
 		}
 		return rspJson.toString();
@@ -323,17 +340,37 @@ public class UmeController extends BaseController {
 		PageData pd = this.getPageData();
 		JSONObject rspJson = new JSONObject();
 		int saveMenu = menuService.saveMenu(pd);
-		String menu_name = (String) pd.get("MENU_NAME");
+		String   menu_name=(String)pd.get("MENU_NAME");
+		String   menu_url=(String)pd.get("MENU_URL");
+		String   parent_id=(String)pd.get("PARENT_ID");
+		String   mplatform=(String)pd.get("MPLATFORM");
+		String   menu_order=(String)pd.get("MENU_ORDER");
+		String   menu_icon=(String)pd.get("MENU_ICON");
+		String   menu_type=(String)pd.get("MENU_TYPE");
+		String   menu_state=(String)pd.get("MENU_STATE");
+		String   last_upd_usr=(String)pd.get("LAST_UPD_USR");
+		String   last_upd_dt=(String)pd.get("LAST_UPD_DT");
+		String   ver=(String)pd.get("VER");
 		if (0 < saveMenu) {
-			@SuppressWarnings("unchecked")
-			Menu map2Bean = MapUtil.map2Bean(pd, Menu.class);
-			List<Menu> allmenuList = CacheUtil.getCahe("AMSMenuList");
-			String parent_id = (String) pd.get("PARENT_ID");
-			List<Menu> addListMenu = CacheUtil.getAddListMenu(allmenuList, parent_id, map2Bean);
-			if (null != addListMenu) {
-				CacheUtil.addCahe(addListMenu, "AMSMenuList");
+			Menu menu = new Menu();
+			menu.setMENU_NAME(menu_name);
+			menu.setMENU_URL(menu_url);
+			menu.setPARENT_ID(parent_id);
+			menu.setMPLATFORM(mplatform);
+			menu.setMENU_ORDER(menu_order);
+			menu.setMENU_ICON(menu_icon);
+			menu.setMENU_TYPE(menu_type);
+			menu.setMENU_STATE(menu_state);
+			menu.setLAST_UPD_USR(last_upd_usr);
+			menu.setLAST_UPD_DT(last_upd_dt);
+			menu.setVER(ver);
+			if (null!=menu) {
+				List<Menu> allmenuList = CacheUtil.getCahe("AMSMenuList");
+				List<Menu> addListMenu = CacheUtil.getAddListMenu(allmenuList, parent_id, menu);
+				if (null != addListMenu) {
+					CacheUtil.addCahe(addListMenu, "AMSMenuList");
+				}
 			}
-
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "添加菜单名称【" + menu_name + "】信息成功!");
 		} else {
@@ -401,10 +438,29 @@ public class UmeController extends BaseController {
 
 	@RequestMapping(value = "/saveUserObject", method = RequestMethod.GET)
 	@ResponseBody
-	public String saveUserObject() throws Exception {
-		PageData pd = this.getPageData();
+	public String saveUserObject(String[] DB_ID) throws Exception {
+		PageData pd01 = this.getPageData();
+		String USER_ID = (String) pd01.get("USER_ID");
+		String BO_TYPE = (String) pd01.get("BO_TYPE");
+		PageData pd_dete = new PageData();
+//		pd_dete.put("BO_DB_ID", DB_ID);
+		pd_dete.put("USER_ID", USER_ID);
+		pd_dete.put("BO_TYPE", BO_TYPE);
+		userService.deleteAllUB(pd_dete);
+		
+		List<PageData> list = new ArrayList<PageData>();
+		 for (String dbid : DB_ID) {
+			 PageData pd02 = new PageData();
+			 pd02.put("USER_ID", USER_ID);
+			 pd02.put("BO_ID", "");
+			 pd02.put("BO_KEY", "");
+			 pd02.put("BO_DB_ID", dbid);
+			 pd02.put("VER", "");
+			 pd02.put("BO_TYPE", BO_TYPE);
+			 list.add(pd02);
+        }
 		JSONObject rspJson = new JSONObject();
-		int insertUB = userService.insertUB(pd);
+		int insertUB = userService.insertBacthUB(list);
 		if (0 < insertUB) {
 			rspJson.put(Const.RESULT_CODE, "S");
 			rspJson.put(Const.RESULT_MSG, "添加用户权限关系信息成功!");
@@ -654,6 +710,9 @@ public class UmeController extends BaseController {
 		JSONObject rspJson = new JSONObject();
 		PageData pd = this.getPageData();
 		String user_id = (String) pd.get("USER_ID");
+		PageData pd_dete = new PageData();
+		pd_dete.put("USER_ID", user_id);
+		userService.deleteAllUB(pd_dete);
 		int deleteU = userService.deleteU(pd);
 		if (0 < deleteU) {
 			rspJson.put(Const.RESULT_CODE, "S");
@@ -699,6 +758,9 @@ public class UmeController extends BaseController {
 	@ResponseBody
 	public String deletePLUserByID(String[] USER_ID) throws Exception {
 		JSONObject rspJson = new JSONObject();
+		PageData pd_dete = new PageData();
+		pd_dete.put("USER_IDS", USER_ID);
+		userService.deleteAllUB(pd_dete);
 		int deleteAllU = userService.deleteAllU(USER_ID);
 		if (0 < deleteAllU) {
 			rspJson.put(Const.RESULT_CODE, "S");

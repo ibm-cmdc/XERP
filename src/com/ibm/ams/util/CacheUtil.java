@@ -51,7 +51,6 @@ public class CacheUtil {
             if (menu_ID2.equals(menu_id)) {
             	if (1<menuSize) {
 				}else{
-					menu.setHasMenu(false);
 					menu.setSubMenu(null);
 				}
                 iter.remove();
@@ -75,8 +74,7 @@ public class CacheUtil {
 			String menu_ID2 = menu.getMENU_ID();
 			boolean hasMenu = menu.isHasMenu();
 			if (menu_ID2.equals(parent_id)) {
-				menu.setHasMenu(true);
-				List<Menu> subMenu = menu.getSubMenu();
+				List<Menu> subMenu=new ArrayList<>(); 
 				subMenu.add(enu);
 				menu.setSubMenu(subMenu);
 			}else{
@@ -135,7 +133,6 @@ public class CacheUtil {
 			String menu_ID2 = menu.getMENU_ID();
 			boolean hasMenu = menu.isHasMenu();
 			if (menu_ID2.equals(parent_id)) {
-				menu.setHasMenu(true);
 				List<Menu> subMenus = menu.getSubMenu();
 				subMenus.add(enu);
 				menu.setSubMenu(subMenus);
@@ -167,7 +164,6 @@ public class CacheUtil {
 	            if (menu_ID2.equals(menu_id)) {
 	            	if (1<menuSize) {
 					}else{
-						menu.setHasMenu(false);
 						menu.setSubMenu(null);
 					}
 	                iter.remove();
@@ -193,7 +189,6 @@ public class CacheUtil {
 				menuBean.add(menu);
 				if (1<menuSize) {
 				}else{
-					menuSu.setHasMenu(false);
 					menuSu.setSubMenu(null);
 				}
 			}else{
@@ -207,25 +202,28 @@ public class CacheUtil {
 	}
 	public static void delePLSubMenu(Menu menuSu,String menu_id){
 		List<Menu> subMenu = menuSu.getSubMenu();
-		int menuSize = subMenu.size();
-		Iterator<Menu> iter = subMenu.iterator();
-		 while (iter.hasNext()) {
-	            Menu menu = iter.next();
-	            String menu_ID2 = menu.getMENU_ID();
-				boolean hasMenu = menu.isHasMenu();
-	            if (menu_ID2.equals(menu_id)) {
-	            	if (1<menuSize) {
-					}else{
-						menuSu.setHasMenu(false);
-						menuSu.setSubMenu(null);
-					}
-	                iter.remove();
-	            }else{
-	            	if (hasMenu) {
-	            		delePLSubMenu( menu, menu_id);
-					}
-	            }
-	        }
+		if (null!=subMenu) {
+			int menuSize = subMenu.size();
+			Iterator<Menu> iter = subMenu.iterator();
+			 while (iter.hasNext()) {
+		            Menu menu = iter.next();
+		            String menu_ID2 = menu.getMENU_ID();
+					boolean hasMenu = menu.isHasMenu();
+						if (menu_ID2.equals(menu_id)) {
+			            	if (1<menuSize) {
+							}else{
+								menuSu.setSubMenu(null);
+							}
+			                iter.remove();
+			            }else{
+			            	if (hasMenu) {
+			            		delePLSubMenu( menu, menu_id);
+							}
+			            }
+		            
+		        }
+		}
+		
 	}
 	public static void deleSubMenu(Menu menuSu,String menu_id){
 		List<Menu> subMenu = menuSu.getSubMenu();
@@ -238,7 +236,6 @@ public class CacheUtil {
 	            if (menu_ID2.equals(menu_id)) {
 	            	if (1<menuSize) {
 					}else{
-						menuSu.setHasMenu(false);
 						menuSu.setSubMenu(null);
 					}
 	                iter.remove();
@@ -319,11 +316,13 @@ public class CacheUtil {
 	 * @return
 	 */
 	public static List<Menu> readMenu(List<Menu> menuList,String roleRights){
-		for(int i=0;i<menuList.size();i++){
-			//set是否对该菜单有权限
-			menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
-			if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
-				readMenu(menuList.get(i).getSubMenu(), roleRights);//是：继续排查其子菜单
+		if (null!=menuList) {
+			for(int i=0;i<menuList.size();i++){
+				//set是否对该菜单有权限
+				menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
+				if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
+					readMenu(menuList.get(i).getSubMenu(), roleRights);//是：继续排查其子菜单
+				}
 			}
 		}
 		return menuList;
@@ -334,6 +333,7 @@ public class CacheUtil {
 		 * @return
 		 */
 		public static List<Integer> readMenuGetMenuID(List<Menu> menuList,String roleRights,List<Integer> listMenuID){
+			if (null!=menuList) {
 			for(int i=0;i<menuList.size();i++){
 				//set是否对该菜单有权限
 				String menu_ID = menuList.get(i).getMENU_ID();
@@ -345,6 +345,7 @@ public class CacheUtil {
 				if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
 					readMenuGetMenuID(menuList.get(i).getSubMenu(), roleRights,listMenuID);//是：继续排查其子菜单
 				}
+			}
 			}
 			return listMenuID;
 		}

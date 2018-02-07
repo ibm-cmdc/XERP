@@ -59,8 +59,9 @@ public class RightsHelper {
 	 * @return
 	 */
 	public static boolean testRights(String sum,String targetRights){
-		if(Tools.isEmpty(sum))
+		if(Tools.isEmpty(sum)||Tools.isEmpty(targetRights))
 			return false;
+		
 		return testRights(new BigInteger(sum),targetRights);
 	}
 	

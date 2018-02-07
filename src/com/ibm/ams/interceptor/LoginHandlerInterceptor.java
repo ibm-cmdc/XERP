@@ -84,7 +84,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 		TokenModel model = manager.getToken(authorization);        
 		if (manager.checkToken(model)) {            
 			//如果token验证成功，将token对应的用户id存在request中，便于之后注入            
-			request.setAttribute(Const.CURRENT_USER_ID, model.getUserId());            
+			request.setAttribute(Const.CURRENT_USER_ID, model.getUserId());   
 			//设置系统平台，访问用户
 			String pla = request.getHeader(Const.PLATFORM); 
 			request.setAttribute(Const.PLATFORM, pla==null?"":pla);

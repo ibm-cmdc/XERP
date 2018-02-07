@@ -45,7 +45,6 @@ public class Tools {
 	public static boolean isEmpty(String s){
 		return s==null || "".equals(s) || "null".equals(s);
 	}
-	
 	/**
 	 * 字符串转换为字符串数组
 	 * @param str 字符串

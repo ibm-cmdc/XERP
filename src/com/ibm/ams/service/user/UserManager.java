@@ -66,7 +66,7 @@ public interface UserManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertUB(PageData pd)throws Exception;
+	public int insertBacthUB(List<PageData> pd)throws Exception;
 	
 	
 	
@@ -152,6 +152,12 @@ public interface UserManager {
 	 * @throws Exception
 	 */
 	public int deleteAllU(String[] USER_IDS)throws Exception;
+	/**批量删除用户权限关系
+	 * @param USER_IDS
+	 * @return 
+	 * @throws Exception
+	 */
+	public int deleteAllUB(PageData pd)throws Exception;
 	
 	/**用户列表(全部)
 	 * @param pd

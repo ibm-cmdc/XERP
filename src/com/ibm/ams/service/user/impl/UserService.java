@@ -63,14 +63,10 @@ public class UserService implements UserManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertUB(PageData pd) throws Exception {
+	public int insertBacthUB(List<PageData> pd) throws Exception {
 		// TODO Auto-generated method stub
-		return (int) dao.save("UserMapper.insertUB", pd);
+		return (int) dao.save("UserMapper.insertBacthUB", pd);
 	}
-	
-	
-	
-	
 	
 	
 	
@@ -194,7 +190,13 @@ public class UserService implements UserManager{
 	public int deleteAllU(String[] USER_IDS)throws Exception{
 		return (int)dao.delete("UserMapper.deleteAllU", USER_IDS);
 	}
-	
+	/**批量删除用户权限关系
+	 * @param USER_IDS
+	 * @throws Exception
+	 */
+	public int deleteAllUB(PageData pd)throws Exception{
+		return (int)dao.delete("UserMapper.deleteAllUB", pd);
+	}
 	/**用户列表(全部)
 	 * @param USER_IDS
 	 * @throws Exception

@@ -23,7 +23,7 @@ public class Menu {
 	
 	private Menu parentMenu;
 	private List<Menu> subMenu;
-	private boolean hasMenu = false;
+	private boolean hasMenu = false;//是否有此菜单权限
 
 
 	public String getMENU_ID() {

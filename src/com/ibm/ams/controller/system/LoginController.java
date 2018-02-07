@@ -91,6 +91,7 @@ public class LoginController extends BaseController {
 		//获取有权限的菜单
 		List<Menu> readMenu = new ArrayList<Menu>();
 		if(map!=null && map instanceof List){
+			@SuppressWarnings("unchecked")
 			List<Menu> allmenuList = (List<Menu>) map;
 			readMenu = this.readMenu(allmenuList,RIGHTS);
 		}
@@ -111,11 +112,15 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	public List<Menu> readMenu(List<Menu> menuList,String roleRights){
-		for(int i=0;i<menuList.size();i++){
-			//set是否对该菜单有权限
-			menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
-			if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
-				this.readMenu(menuList.get(i).getSubMenu(), roleRights);//是：继续排查其子菜单
+		if (null!=menuList) {
+			for(int i=0;i<menuList.size();i++){
+				//set是否对该菜单有权限
+				String menu_ID = menuList.get(i).getMENU_ID();
+				boolean testRights = RightsHelper.testRights(roleRights, menu_ID);
+				menuList.get(i).setHasMenu(testRights);
+				if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
+					this.readMenu(menuList.get(i).getSubMenu(), roleRights);//是：继续排查其子菜单
+				}
 			}
 		}
 		return menuList;

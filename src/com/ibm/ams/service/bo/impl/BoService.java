@@ -28,7 +28,7 @@ public class BoService implements BoManager{
 		return (PageData)dao.findForObject("BoMapper.queryBoCount", value);
 	}
 	@SuppressWarnings("unchecked")
-	public List<PageData> QueryBokey() throws Exception {
+	public List<PageData> queryBokey() throws Exception {
 		// TODO Auto-generated method stub
 		return (List<PageData>)dao.findForList("BoMapper.queryBokey");
 	}
@@ -56,5 +56,10 @@ public class BoService implements BoManager{
 		// TODO Auto-generated method stub
 		return (int)dao.save("BoMapper.deleteBoById", db_id);
 	}
+	public List<PageData> queryBoType() throws Exception {
+		// TODO Auto-generated method stub
+		return (List<PageData>)dao.findForList("BoMapper.queryBoType");
+	}
+	
 
 }

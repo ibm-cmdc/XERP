@@ -6,6 +6,7 @@ package com.ibm.ams.entity.system;
 public class Bo {
 	private String DB_ID; // 表ID
 	private String BO_NAME; // 数据对象名称
+	private String BO_TYPE;//数据分类
 	private String BO_ID; // 数据对象ID
 	private String BO_KEY; // 数据对象KEY
 	private String BO_VALUE; // 数据对象VALUE
@@ -23,9 +24,16 @@ public class Bo {
 	public String getDB_ID() {
 		return DB_ID;
 	}
-
+	
 	public void setDB_ID(String dB_ID) {
 		this.DB_ID = dB_ID;
+	}
+	public String getBO_TYPE() {
+		return BO_TYPE;
+	}
+
+	public void setBO_TYPE(String bO_TYPE) {
+		this.BO_TYPE = bO_TYPE;
 	}
 
 	public String getBO_NAME() {

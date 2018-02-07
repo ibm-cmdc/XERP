@@ -1,8 +1,6 @@
 package com.ibm.ams.controller.base;
 
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -19,8 +17,6 @@ public class BaseController {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 
-	private static final long serialVersionUID = 6357869213649815390L;
-	
 	/** new PageData对象
 	 * @return
 	 */
