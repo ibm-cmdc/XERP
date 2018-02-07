@@ -6,6 +6,7 @@
 		<id column="DB_ID" property="DB_ID" />
 		<result column="BO_NAME" property="BO_NAME" />
 		<result column="BO_ID" property="BO_ID" />
+		<result column="BO_TYPE" property="BO_TYPE" />
 		<result column="BO_KEY" property="BO_KEY" />
 		<result column="BO_DESC" property="BO_DESC" />
 		<result column="BO_VALUE" property="BO_VALUE" />
@@ -14,7 +15,7 @@
 		<result column="ADD3" property="ADD3" />
 		<result column="ADD4" property="ADD4" />
 		<result column="ADD5" property="ADD5" />
-		<result column="BPLATFORM" property="BPLATFORM" />
+		<result column="PLATFORM" property="BPLATFORM" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
 		<result column="VER" property="VER" />
@@ -31,7 +32,7 @@
 		<result column="EMAIL" property="EMAIL" />
 		<result column="PHONE" property="PHONE" />
 		<result column="UGROUP" property="UGROUP" />
-		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="PLATFORM" property="UPLATFORM" />
 		<result column="UCOMPANY" property="UCOMPANY" />
 		<result column="UCOSTCENTER" property="UCOSTCENTER" />
 		<result column="UORGANIZATION" property="UORGANIZATION" />
@@ -55,6 +56,7 @@
 	<!-- 字段 -->
 	<sql id="Field">
 		"DB_ID",
+		"BO_TYPE",
 		"BO_NAME",
 		"BO_ID",
 		"BO_KEY",
@@ -65,15 +67,33 @@
 		"ADD3",
 		"ADD4",
 		"ADD5",
-		"BPLATFORM",
+		"BPLATFORM"  ,
 		"LAST_UPD_USR",
 		"LAST_UPD_DT",
 		"VER"
 	</sql>
-
+    <sql id="queryField">
+		"DB_ID",
+		"BO_TYPE",
+		"BO_NAME",
+		"BO_ID",
+		"BO_KEY",
+		"BO_DESC",
+		"BO_VALUE",
+		"ADD1",
+		"ADD2",
+		"ADD3",
+		"ADD4",
+		"ADD5",
+		"BPLATFORM" as PLATFORM ,
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
+	</sql>
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{DB_ID},
+		#{BO_TYPE},
 		#{BO_NAME},
 		#{BO_ID},
 		#{BO_KEY},
@@ -84,7 +104,7 @@
 		#{ADD3},
 		#{ADD4},
 		#{ADD5},
-		#{BPLATFORM},
+		#{PLATFORM},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
 		#{LAST_UPD_DT},
 		#{VER}
@@ -96,6 +116,9 @@
 		    and "BO_NAME"=#{BO_NAME}</if>
 		<if test="BO_ID!=null and BO_ID!=''">
 			and "BO_ID"=#{BO_ID}
+		</if>
+		<if test="BO_TYPE!=null and BO_TYPE!=''">
+			and "BO_TYPE"=#{BO_TYPE}
 		</if>
 		<if test="BO_KEY!=null and BO_KEY!=''">
 			and "BO_KEY"=#{BO_KEY}
@@ -121,17 +144,17 @@
 		<if test="ADD5!=null and ADD5!=''">
 			and "ADD5"=#{ADD5}
 		</if>
-		<if test="BPLATFORM!=null and BPLATFORM!=''">
-			and "BPLATFORM"=#{BPLATFORM}
+		<if test="PLATFORM!=null and PLATFORM!=''">
+			and "BPLATFORM"=#{PLATFORM}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			and "LAST_UPD_USR"={#LAST_UPD_USR}
+			and "LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			and "LAST_UPD_DT"={#LAST_UPD_DT}
+			and "LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			and "VER"={#VER}
+			and "VER"=#{VER}
 		</if>
 		<if test="BOIDORBONAME!=null and BOIDORBONAME!=''">
 		    and (("BO_ID" like '%'||#{BOIDORBONAME}||'%') or ("BO_NAME" like '%'||#{BOIDORBONAME}||'%'))
@@ -140,10 +163,12 @@
 	<!--通过ID获取其子一级菜单 -->
 	<select id="queryBo" parameterType="String" resultMap="boResultMap">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
-		where "DB_ID" = #{DB_ID}
+		
+		where 1=1
+		<include refid="BoCconditions" />
 	</select>
 	<select id="queryBoCount" parameterType="String" resultType="pd">
 		select
@@ -158,6 +183,14 @@
 		<include refid="tableName"></include>
 		group by "BO_KEY"
 	</select>
+	<select id="queryBoType" parameterType="String" resultType="pd">
+		select
+		"BO_TYPE"
+		from
+		<include refid="tableName"></include>
+		group by "BO_TYPE"
+	</select> 
+	
 	<select id="queryBoInfo" parameterType="String" resultMap="boResultMap">
 		select * from ( SELECT ROWNUM AS rowno, t.* FROM SYS_BO t
 		<where>
@@ -187,7 +220,7 @@
 		U.EMAIL,
 		U.PHONE,
 		U.UGROUP,
-		U.UPLATFORM,
+		U.UPLATFORM AS PLATFORM,
 		U.UCOMPANY,
 		U.UCOSTCENTER,
 		U.UORGANIZATION,
@@ -206,14 +239,21 @@
 		SYS_USER_OBJECT UO, SYS_USER
 		U,SYS_BO B
 		WHERE 1=1
-		AND
-		UO.USER_ID=U.USER_ID
-		AND UO.BO_ID=B.BO_ID
+		AND UO.USER_ID=U.USER_ID
+		AND UO.BO_DB_ID=B.DB_ID
+		AND UO.BO_TYPE=B.BO_TYPE
+		<!-- AND UO.BO_ID=B.BO_ID -->
+		<if test="DB_ID!=null and  DB_ID!=''">
+			AND B.DB_ID=#{DB_ID}
+		</if>
 		<if test="BO_ID!=null and  BO_ID!=''">
 			AND B.BO_ID=#{BO_ID}
 		</if>
-		<if test="BPLATFORM!=null and  BPLATFORM!=''">
-			AND B.BPLATFORM =#{BPLATFORM}
+		<if test="BO_TYPE!=null and BO_TYPE!=''">
+			AND B.BO_TYPE=#{BO_TYPE}
+		</if>
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			AND B.BPLATFORM =#{PLATFORM}
 		</if>
 	</select>
 	<!--新增 -->
@@ -237,6 +277,9 @@
 		"BO_NAME" =#{BO_NAME}
 		<if test="BO_ID!=null and  BO_ID!=''">
 			,"BO_ID" =#{BO_ID}
+		</if>
+		<if test="BO_TYPE!=null and  BO_TYPE!=''">
+			,"BO_TYPE" =#{BO_TYPE}
 		</if>
 		<if test="BO_KEY!=null and  BO_KEY!=''">
 			,"BO_KEY" =#{BO_KEY}
@@ -262,17 +305,17 @@
 		<if test="ADD5!=null and  ADD5!=''">
 			,"ADD5" =#{ADD5}
 		</if>
-		<if test="BPLATFORM!=null and  BPLATFORM!=''">
-			,"BPLATFORM" =#{BPLATFORM}
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			,"BPLATFORM" =#{PLATFORM}
 		</if>
         <if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			,"LAST_UPD_USR"={#LAST_UPD_USR}
+			,"LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			,"LAST_UPD_DT"={#LAST_UPD_DT}
+			,"LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			,"VER"={#VER}
+			,"VER" = #{VER}
 		</if>
 		where "DB_ID"=#{DB_ID}
 	</update>

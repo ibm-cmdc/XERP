@@ -14,7 +14,7 @@
 		<result column="EMAIL" property="EMAIL" />
 		<result column="PHONE" property="PHONE" />
 		<result column="UGROUP" property="UGROUP" />
-		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="PLATFORM" property="UPLATFORM" />
 		<result column="UCOMPANY" property="UCOMPANY" />
 		<result column="UCOSTCENTER" property="UCOSTCENTER" />
 		<result column="UORGANIZATION" property="UORGANIZATION" />
@@ -48,7 +48,7 @@
 		<result column="EMAIL" property="EMAIL" />
 		<result column="PHONE" property="PHONE" />
 		<result column="UGROUP" property="UGROUP" />
-		<result column="UPLATFORM" property="UPLATFORM" />
+		<result column="PLATFORM" property="UPLATFORM" />
 		<result column="UCOMPANY" property="UCOMPANY" />
 		<result column="UCOSTCENTER" property="UCOSTCENTER" />
 		<result column="UORGANIZATION" property="UORGANIZATION" />
@@ -68,6 +68,7 @@
 	<resultMap type="Bo" id="boResultMap">
 		<id column="DB_ID" property="DB_ID" />
 		<result column="BO_NAME" property="BO_NAME" />
+		<result column="BO_TYPE" property="BO_TYPE" />
 		<result column="BO_ID" property="BO_ID" />
 		<result column="BO_KEY" property="BO_KEY" />
 		<result column="BO_DESC" property="BO_DESC" />
@@ -77,7 +78,7 @@
 		<result column="ADD3" property="ADD3" />
 		<result column="ADD4" property="ADD4" />
 		<result column="ADD5" property="ADD5" />
-		<result column="BPLATFORM" property="BPLATFORM" />
+		<result column="PLATFORM" property="BPLATFORM" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
 		<result column="VER" property="VER" />
@@ -127,6 +128,34 @@
 		"LAST_UPD_DT",
 		"VER"
 	</sql>
+	<sql id="queryField">
+		"USER_ID",
+		"USERNAME",
+		"UPASSWORD",
+		"UNAME",
+		"ROLE_ID",
+		"LAST_LOGIN",
+		"LAST_IP",
+		"STATUS",
+		"EMAIL",
+		"PHONE",
+		"UGROUP",
+		"UPLATFORM" as PLATFORM,
+		"UCOMPANY",
+		"UCOSTCENTER",
+		"UORGANIZATION",
+		"UPOSITION",
+		"UBPMGROUP",
+		"CREATETIME",
+		"INTERSTART",
+		"INTERDURA",
+		"LAST_CHANGE",
+		"OPENID",
+		"SECPOLICY",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
+	</sql>
 	<sql id="UserCconditions">
 		<if test="USERNAME!=null and USERNAME!=''">
 			and "USERNAME" = #{USERNAME}
@@ -140,8 +169,8 @@
 		<if test="ROLE_ID!=null and  ROLE_ID!=''">
 			and "ROLE_ID"= #{ROLE_ID}
 		</if>
-		<if test="UPLATFORM!=null and  UPLATFORM!=''">
-			and "UPLATFORM"= #{UPLATFORM}
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			and "UPLATFORM"= #{PLATFORM}
 		</if>
 		<if test="COMPANY!=null and  COMPANY!=''">
 			and "COMPANY"= #{COMPANY}
@@ -175,7 +204,7 @@
 		#{EMAIL,jdbcType=NVARCHAR},
 		#{PHONE,jdbcType=NVARCHAR},
 		#{UGROUP,jdbcType=NVARCHAR},
-		#{UPLATFORM,jdbcType=NVARCHAR},
+		#{PLATFORM,jdbcType=NVARCHAR},
 		#{UCOMPANY,jdbcType=NVARCHAR},
 		#{UCOSTCENTER,jdbcType=NVARCHAR},
 		#{UORGANIZATION,jdbcType=NVARCHAR},
@@ -194,7 +223,7 @@
 	<!-- 判断用户名和密码 -->
 	<select id="getUserInfo" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where 1=1
@@ -245,7 +274,7 @@
 		u."USERNAME",
 		u."UNAME" ,
 		u."UPASSWORD" ,
-		u."UPLATFORM",
+		u."UPLATFORM" AS PLATFORM,
 		<!-- u."SKIN", -->
 		r."ROLE_ID",
 		r."ROLE_NAME",
@@ -265,8 +294,8 @@
 		<if test="USER_ID!=null and USER_ID>0">
 			and u."USER_ID" = #{USER_ID}
 		</if>
-		<if test="UPLATFORM!=null and  UPLATFORM!=''">
-			and "UPLATFORM"= #{UPLATFORM}
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			and "UPLATFORM"= #{PLATFORM}
 		</if>
 	</select>
 
@@ -276,6 +305,7 @@
 	<select id="queryBoByUidUpa" parameterType="String" resultMap="boResultMap">
 		SELECT B.DB_ID,
 		B.BO_NAME,
+		B.BO_TYPE,
 		B.BO_ID,
 		B.BO_KEY,
 		B.BO_DESC,
@@ -285,18 +315,23 @@
 		B.ADD3,
 		B.ADD4,
 		B.ADD5,
-		B.BPLATFORM
+		B.BPLATFORM AS PLATFORM 
 		FROM SYS_USER_OBJECT UO, SYS_USER
 		U,SYS_BO B
 		WHERE 1=1
 		AND UO.USER_ID=U.USER_ID
-		AND UO.BO_ID=B.BO_ID 
-		AND UO.BO_KEY=B.BO_KEY
+		<!-- AND UO.BO_ID=B.BO_ID  -->
+		AND UO.BO_DB_ID=B.DB_ID
+		AND UO.BO_TYPE=B.BO_TYPE
+		<!-- AND UO.BO_KEY=B.BO_KEY -->
 		<if test="USER_ID!=null and  USER_ID!=''">
 			AND U.USER_ID=#{USER_ID}
 		</if>
-		<if test="UPLATFORM!=null and  UPLATFORM!=''">
-			AND U.UPLATFORM =#{UPLATFORM}
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			AND U.UPLATFORM =#{PLATFORM}
+		</if>
+		<if test="BO_TYPE!=null and  BO_TYPE!=''">
+			AND UO.BO_TYPE =#{BO_TYPE}
 		</if>
 	</select>
 	<!-- 更新登录时间 -->
@@ -332,8 +367,8 @@
 		<if test="UGROUP!=null and UGROUP!=''">
 			,"UGROUP"=#{UGROUP}
 		</if>
-		<if test="UPLATFORM!=null and UPLATFORM!=''">
-			,"UPLATFORM"=#{UPLATFORM}
+		<if test="PLATFORM!=null and PLATFORM!=''">
+			,"UPLATFORM"=#{PLATFORM}
 		</if>
 		<if test="UCOMPANY!=null and UCOMPANY!=''">
 			,"UCOMPANY"=#{UCOMPANY}
@@ -369,13 +404,13 @@
 			,"SECPOLICY"=#{SECPOLICY}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			,"LAST_UPD_USR"={#LAST_UPD_USR}
+			,"LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			,"LAST_UPD_DT"={#LAST_UPD_DT}
+			,"LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			,"VER"={#VER}
+			,"VER"=#{VER}
 		</if>
 
 		where "USER_ID" = #{USER_ID}
@@ -384,20 +419,20 @@
 	    update
 		   <include refid="userObjectTableName"></include>
 		set
-		   "BO_KEY"={#BO_KEY}
+		   "BO_KEY"=#{BO_KEY}
 		   <if test="BO_ID!=null and BO_ID!=''">
-			,"BO_ID"={#BO_ID}
+			,"BO_ID"=#{BO_ID}
 		   </if>
 		   <if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
 			,"LAST_UPD_USR"=to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd')
 		   </if>
 		    <if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			,"LAST_UPD_DT"={#LAST_UPD_DT}
+			,"LAST_UPD_DT"=#{LAST_UPD_DT}
 		   </if>
 		   <if test="VER!=null and VER!=''">
-			,"VER"={#VER}
+			,"VER"=#{VER}
 		   </if>
-		 where "USER_ID"={#USER_ID}
+		 where "USER_ID"=#{USER_ID}
 	</update>
 	
 	
@@ -412,7 +447,7 @@
 		USER_ID, USERNAME, UPASSWORD, UNAME, ROLE_ID,
 		<!-- LAST_LOGIN, -->
 		LAST_IP,
-		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM, UCOMPANY,
+		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM AS PLATFORM, UCOMPANY,
 		UCOSTCENTER,
 		UORGANIZATION, UPOSITION, 
 		UBPMGROUP,
@@ -432,7 +467,7 @@
 		#{EMAIL,jdbcType=NVARCHAR},
 		#{PHONE,jdbcType=NVARCHAR},
 		#{UGROUP,jdbcType=NVARCHAR},
-		#{UPLATFORM,jdbcType=NVARCHAR},
+		#{PLATFORM,jdbcType=NVARCHAR},
 		#{UCOMPANY,jdbcType=NVARCHAR},
 		#{UCOSTCENTER,jdbcType=NVARCHAR},
 		#{UORGANIZATION,jdbcType=NVARCHAR},
@@ -447,28 +482,29 @@
 		)
 	</insert>
 
-	<insert id="insertUB" parameterType="pd">
-		<selectKey keyProperty="DB_ID" resultType="String" order="BEFORE">
+	<insert id="insertBacthUB" parameterType="java.util.List">
+		 <selectKey keyProperty="DB_ID" resultType="String" order="BEFORE">
 			select SYS_USEROBJECT_SEQ.NEXTVAL as DB_ID from dual
 		</selectKey>
 		insert into 
 		<include refid="userObjectTableName"></include>
-		("DB_ID",
-		"USER_ID",
-		"BO_ID",
-		"BO_KEY",
-		<!-- "LAST_UPD_USR",
-		"LAST_UPD_DT", -->
-		"VER")
-		values (
-		#{DB_ID,jdbcType=NVARCHAR},
-		#{USER_ID,jdbcType=NVARCHAR},
-		#{BO_ID,jdbcType=NVARCHAR},
-		#{BO_KEY,jdbcType=NVARCHAR},
-		<!-- to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
-		#{LAST_UPD_DT,jdbcType=NVARCHAR}, -->
-		#{VER,jdbcType=NVARCHAR}
-		)
+		("DB_ID","USER_ID","BO_ID","BO_KEY","BO_DB_ID",<!-- "LAST_UPD_USR","LAST_UPD_DT", -->"VER","BO_TYPE")
+		SELECT SYS_USEROBJECT_SEQ.NEXTVAL DB_ID, A.*
+        FROM(
+		 <foreach collection="list" item="item" index="index" separator="UNION ALL">
+		 SELECT 
+           <!--  #{item.DB_ID,jdbcType=NVARCHAR},   -->
+            #{item.USER_ID,jdbcType=NVARCHAR},
+            #{item.BO_ID,jdbcType=NVARCHAR},
+            #{item.BO_KEY,jdbcType=NVARCHAR},
+            #{item.BO_DB_ID,jdbcType=NVARCHAR},
+            <!-- to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
+		    #{LAST_UPD_DT,jdbcType=NVARCHAR}, -->
+            #{item.VER,jdbcType=NVARCHAR},
+            #{item.BO_TYPE,jdbcType=NVARCHAR} 
+         FROM dual	
+        </foreach>
+        )A
 	</insert>
 
 
@@ -507,7 +543,7 @@
 	<!-- 通过USERNAME获取数据 -->
 	<select id="findByUsername" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where
@@ -588,7 +624,7 @@
 	<!-- 通过邮箱获取数据 -->
 	<select id="findByUE" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where
@@ -601,7 +637,7 @@
 	<!-- 通过编号获取数据 -->
 	<select id="findByUN" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where
@@ -614,7 +650,7 @@
 	<!-- 通过user_id获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where
@@ -646,7 +682,33 @@
 		and
 		"USER_ID" != '1'
 	</delete>
-
+    
+    <!-- 批量删除用户 -->
+	<delete id="deleteAllUB" parameterType="pd">
+		delete from
+		<include refid="userObjectTableName"></include>
+		where
+		"USER_ID" != '1'
+		<if test="BO_DB_ID!=null and BO_DB_ID!=''">
+		and "BO_DB_ID" in
+		<foreach item="item" index="index" collection="BO_DB_ID" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+		<if test="USER_ID!=null and USER_ID!=''">
+		and "USER_ID"=#{USER_ID}
+		</if>
+		<if test="USER_IDS!=null and USER_IDS!=''">
+		and "USER_ID" in
+		<foreach item="item" index="index" collection="USER_IDS" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+		<if test="BO_TYPE!=null and BO_TYPE!=''">
+		and "BO_TYPE"=#{BO_TYPE}
+		</if>
+	</delete>
+	
 	<!-- 用户列表(全部) -->
 	<select id="listAllUser" parameterType="pd" resultType="pd">
 		select u."USER_ID",

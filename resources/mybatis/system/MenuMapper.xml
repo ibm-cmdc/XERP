@@ -12,7 +12,7 @@
 		<result column="MENU_ICON" property="MENU_ICON" />
 		<result column="MENU_TYPE" property="MENU_TYPE" />
 		<result column="MENU_STATE" property="MENU_STATE" />
-		<result column="MPLATFORM" property="MPLATFORM" />
+		<result column="PLATFORM" property="MPLATFORM" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
 		<result column="VER" property="VER" />
@@ -49,7 +49,21 @@
 		"MENU_ICON",
 		"MENU_TYPE",
 		"MENU_STATE",
-		"MPLATFORM",
+		"MPLATFORM" ,
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
+	</sql>
+	<sql id="queryField">
+		"MENU_ID",
+		"MENU_NAME",
+		"MENU_URL",
+		"PARENT_ID",
+		"MENU_ORDER",
+		"MENU_ICON",
+		"MENU_TYPE",
+		"MENU_STATE",
+		"MPLATFORM" as PLATFORM,
 		"LAST_UPD_USR",
 		"LAST_UPD_DT",
 		"VER"
@@ -65,7 +79,7 @@
 		#{MENU_ICON},
 		#{MENU_TYPE},
 		#{MENU_STATE},
-		#{MPLATFORM},
+		#{PLATFORM},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
 		#{LAST_UPD_DT},
 		#{VER}
@@ -95,17 +109,17 @@
 		<if test="MENU_STATE!=null and MENU_STATE!=''">
 			and "MENU_STATE"=#{MENU_STATE}
 		</if>
-		<if test="MPLATFORM!=null and MPLATFORM!=''">
-			and "MPLATFORM"=#{MPLATFORM}
+		<if test="PLATFORM!=null and PLATFORM!=''">
+			and "MPLATFORM"=#{PLATFORM}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			and "LAST_UPD_USR"={#LAST_UPD_USR}
+			and "LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			and "LAST_UPD_DT"={#LAST_UPD_DT}
+			and "LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			and "VER"={#VER}
+			and "VER"=#{VER}
 		</if>
 		<if test="MENUANDPARENT!=null and MENUANDPARENT!=''">
 		    and ("MENU_ID"=#{MENUANDPARENT} or "PARENT_ID"=#{MENUANDPARENT})
@@ -113,8 +127,8 @@
 	</sql>
 	<!--通过ID获取其子一级菜单 -->
 	<select id="listSubMenuByParentId" parameterType="String" resultMap="menuResultMap">
-		select
-		<include refid="Field"></include>
+		select 
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where "PARENT_ID" = #{parentId}
@@ -124,7 +138,7 @@
 	<!--通过菜单ID获取数据 -->
 	<select id="queryMenuById" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where "MENU_ID"=#{MENU_ID} 
@@ -135,7 +149,7 @@
 	<!--通过菜单ID获取数据 -->
 	<select id="queryMenu" parameterType="pd" resultMap="menuResultMap">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where 1=1
@@ -209,17 +223,17 @@
 		<if test="MENU_STATE!=null and  MENU_STATE!=''">
 			,"MENU_STATE" =#{MENU_STATE}
 		</if>
-		<if test="MPLATFORM!=null and  MPLATFORM!=''">
-			,"MPLATFORM" =#{MPLATFORM}
+		<if test="PLATFORM!=null and  PLATFORM!=''">
+			,"MPLATFORM" =#{PLATFORM}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			,"LAST_UPD_USR"={#LAST_UPD_USR}
+			,"LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			,"LAST_UPD_DT"={#LAST_UPD_DT}
+			,"LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			,"VER"={#VER}
+			,"VER"=#{VER}
 		</if>
 		where
 		"MENU_ID"=#{MENU_ID}

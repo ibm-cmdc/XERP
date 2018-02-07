@@ -6,7 +6,7 @@
 		<id column="INTF_ID" property="INTF_ID" />
 		<result column="INTF_NAME" property="INTF_NAME" />
 		<result column="INTF_URL" property="INTF_URL" />
-		<result column="IPLATFORM" property="IPLATFORM" />
+		<result column="PLATFORM" property="IPLATFORM" />
 		<result column="INTF_DESC" property="INTF_DESC" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
@@ -22,7 +22,7 @@
 		<result column="DEL_QX" property="DEL_QX" />
 		<result column="EDIT_QX" property="EDIT_QX" />
 		<result column="QUR_QX" property="QUR_QX" />
-		<result column="RPLATFORM" property="RPLATFORM" />
+		<result column="PLATFORM" property="RPLATFORM" />
 		<result column="ROLE_TYPE" property="ROLE_TYPE" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
@@ -50,7 +50,7 @@
 		#{INTF_ID},
 		#{INTF_NAME},
 		#{INTF_URL},
-		#{IPLATFORM},
+		#{PLATFORM},
 		#{INTF_DESC},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
 		#{LAST_UPD_DT},
@@ -68,7 +68,7 @@
                  r."DEL_QX",
                  r."EDIT_QX",
                  r."QUR_QX",
-                 r."RPLATFORM",
+                 r."RPLATFORM" as PLATFORM,
                  r."ROLE_TYPE",
                  r."LAST_UPD_USR",
 		         r."LAST_UPD_DT",
@@ -111,7 +111,7 @@
 		set
 		"INTF_NAME" =#{INTF_NAME},
 		"INTF_URL" =#{INTF_URL},
-		"IPLATFORM" =#{IPLATFORM}
+		"IPLATFORM" =#{PLATFORM}
 		where
 		"INTF_ID"=#{INTF_ID}
 	</update>

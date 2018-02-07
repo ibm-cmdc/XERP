@@ -12,7 +12,7 @@
 		<result column="DEL_QX" property="DEL_QX" />
 		<result column="EDIT_QX" property="EDIT_QX" />
 		<result column="QUR_QX" property="QUR_QX" />
-		<result column="RPLATFORM" property="RPLATFORM" />
+		<result column="PLATFORM" property="RPLATFORM" />
 		<result column="ROLE_TYPE" property="ROLE_TYPE" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
@@ -23,7 +23,7 @@
 		<id column="INTF_ID" property="INTF_ID" />
 		<result column="INTF_NAME" property="INTF_NAME" />
 		<result column="INTF_URL" property="INTF_URL" />
-		<result column="IPLATFORM" property="IPLATFORM" />
+		<result column="PLATFORM" property="IPLATFORM" />
 		<result column="INTF_DESC" property="INTF_DESC" />
 		<result column="LAST_UPD_USR" property="LAST_UPD_USR" />
 		<result column="LAST_UPD_DT" property="LAST_UPD_DT" />
@@ -46,6 +46,21 @@
 		"LAST_UPD_DT",
 		"VER"
 	</sql>
+	<sql id="queryField">
+		"ROLE_ID",
+		"ROLE_NAME",
+		"PARENT_ID",
+		"RIGHTS",
+		"ADD_QX",
+		"DEL_QX",
+		"EDIT_QX",
+		"QUR_QX",
+		"RPLATFORM" as PLATFORM,
+		"ROLE_TYPE",
+		"LAST_UPD_USR",
+		"LAST_UPD_DT",
+		"VER"
+	</sql>
 
 	<!-- 字段值 -->
 	<sql id="FieldValue">
@@ -57,7 +72,7 @@
 		#{DEL_QX},
 		#{EDIT_QX},
 		#{QUR_QX},
-		#{RPLATFORM},
+		#{PLATFORM},
 		#{ROLE_TYPE},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
 		#{LAST_UPD_DT},
@@ -77,7 +92,7 @@
 		intf."INTF_ID",
 		intf."INTF_NAME",
 		intf."INTF_URL",
-		intf."IPLATFORM",
+		intf."IPLATFORM" as PLATFORM,
 		intf."INTF_DESC",
 		intf."LAST_UPD_USR",
 		intf."LAST_UPD_DT",
@@ -94,7 +109,7 @@
 	<!-- 列出此组下的角色 -->
 	<select id="queryRolesInfo" resultMap="roleResultMap">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where 1=1
@@ -122,20 +137,20 @@
 		<if test="QUR_QX!=null and QUR_QX!=''">
 			and "QUR_QX"=#{QUR_QX}
 		</if>
-		<if test="RPLATFORM!=null and RPLATFORM!=''">
-			and "RPLATFORM"=#{RPLATFORM}
+		<if test="PLATFORM!=null and PLATFORM!=''">
+			and "RPLATFORM"=#{PLATFORM}
 		</if>
 		<if test="ROLE_TYPE!=null and ROLE_TYPE!=''">
 			and "ROLE_TYPE"=#{ROLE_TYPE}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			and "LAST_UPD_USR"={#LAST_UPD_USR}
+			and "LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			and "LAST_UPD_DT"={#LAST_UPD_DT}
+			and "LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			and "VER"={#VER}
+			and "VER"=#{VER}
 		</if>
 		
 		ORDER BY "ROLE_ID"
@@ -164,20 +179,20 @@
 		<if test="QUR_QX != null and  QUR_QX!= ''">
 			,"QUR_QX"=#{QUR_QX}
 		</if>
-		<if test="RPLATFORM != null and  RPLATFORM!= ''">
-			,"RPLATFORM"=#{RPLATFORM}
+		<if test="PLATFORM != null and  PLATFORM!= ''">
+			,"RPLATFORM"=#{PLATFORM}
 		</if>
 		<if test="ROLE_TYPE != null and  ROLE_TYPE!= ''">
 			,"ROLE_TYPE"=#{ROLE_TYPE}
 		</if>
 		<if test="LAST_UPD_USR!=null and LAST_UPD_USR!=''">
-			,"LAST_UPD_USR"={#LAST_UPD_USR}
+			,"LAST_UPD_USR"=#{LAST_UPD_USR}
 		</if>
 		<if test="LAST_UPD_DT!=null and LAST_UPD_DT!=''">
-			,"LAST_UPD_DT"={#LAST_UPD_DT}
+			,"LAST_UPD_DT"=#{LAST_UPD_DT}
 		</if>
 		<if test="VER!=null and VER!=''">
-			,"VER"={#VER}
+			,"VER"=#{VER}
 		</if>
 		
 		where "ROLE_ID" = #{ROLE_ID}
@@ -194,14 +209,10 @@
 		and "ROLE_ID" != '1'
 	</delete>
 
-
-
-
-
 	<!-- 通过id查找 -->
 	<select id="findObjectById" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
+		<include refid="queryField"></include>
 		from
 		<include refid="tableName"></include>
 		where "ROLE_ID" = #{ROLE_ID}
