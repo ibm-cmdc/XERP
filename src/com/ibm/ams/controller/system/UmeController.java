@@ -340,6 +340,7 @@ public class UmeController extends BaseController {
 		PageData pd = this.getPageData();
 		JSONObject rspJson = new JSONObject();
 		int saveMenu = menuService.saveMenu(pd);
+		String   menu_id=(String)pd.get("MENU_ID");
 		String   menu_name=(String)pd.get("MENU_NAME");
 		String   menu_url=(String)pd.get("MENU_URL");
 		String   parent_id=(String)pd.get("PARENT_ID");
@@ -353,6 +354,7 @@ public class UmeController extends BaseController {
 		String   ver=(String)pd.get("VER");
 		if (0 < saveMenu) {
 			Menu menu = new Menu();
+			menu.setMENU_ID(menu_id);
 			menu.setMENU_NAME(menu_name);
 			menu.setMENU_URL(menu_url);
 			menu.setPARENT_ID(parent_id);
@@ -660,6 +662,8 @@ public class UmeController extends BaseController {
 		int deleteMenuById = menuService.deletePLMenuById(MENU_ID);
 		if (0 < deleteMenuById) {
 			List<Menu> allmenuList = CacheUtil.getCahe("AMSMenuList");
+			JSONArray arr = JSONArray.fromObject(allmenuList);
+			System.out.println(arr.toString());
 			List<Menu> menuBean = CacheUtil.getDelePlMenuByListMenu(allmenuList, MENU_ID);
 			if (null != menuBean) {
 				CacheUtil.addCahe(allmenuList, "AMSMenuList");

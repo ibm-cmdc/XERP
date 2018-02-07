@@ -47,7 +47,9 @@ public class CacheUtil {
 		while (iter.hasNext()) {
             Menu menu = iter.next();
             String menu_ID2 = menu.getMENU_ID();
-			boolean hasMenu = menu.isHasMenu();
+            if (null==menu_ID2||"".equals(menu_ID2)) {
+            	continue;
+			}
             if (menu_ID2.equals(menu_id)) {
             	if (1<menuSize) {
 				}else{
@@ -55,9 +57,7 @@ public class CacheUtil {
 				}
                 iter.remove();
             }else{
-            	if (hasMenu) {
 					deleSubMenu( menu, menu_id);
-				}
             }
         }
 		return allmenuList;
@@ -160,7 +160,9 @@ public class CacheUtil {
 			while (iter.hasNext()) {
 	            Menu menu = iter.next();
 	            String menu_ID2 = menu.getMENU_ID();
-				boolean hasMenu = menu.isHasMenu();
+	            if (null==menu_ID2||"".equals(menu_ID2)) {
+	            	continue;
+				}
 	            if (menu_ID2.equals(menu_id)) {
 	            	if (1<menuSize) {
 					}else{
@@ -168,9 +170,7 @@ public class CacheUtil {
 					}
 	                iter.remove();
 	            }else{
-	            	if (hasMenu) {
-	            		delePLSubMenu( menu, menu_id);
-					}
+	            	delePLSubMenu( menu, menu_id);
 	            }
 	        }
 			
@@ -208,7 +208,9 @@ public class CacheUtil {
 			 while (iter.hasNext()) {
 		            Menu menu = iter.next();
 		            String menu_ID2 = menu.getMENU_ID();
-					boolean hasMenu = menu.isHasMenu();
+		            if (null==menu_ID2||"".equals(menu_ID2)) {
+		            	continue;
+					}
 						if (menu_ID2.equals(menu_id)) {
 			            	if (1<menuSize) {
 							}else{
@@ -216,9 +218,7 @@ public class CacheUtil {
 							}
 			                iter.remove();
 			            }else{
-			            	if (hasMenu) {
 			            		delePLSubMenu( menu, menu_id);
-							}
 			            }
 		            
 		        }

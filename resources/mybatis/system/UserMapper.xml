@@ -447,7 +447,7 @@
 		USER_ID, USERNAME, UPASSWORD, UNAME, ROLE_ID,
 		<!-- LAST_LOGIN, -->
 		LAST_IP,
-		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM AS PLATFORM, UCOMPANY,
+		STATUS, EMAIL, PHONE, UGROUP, UPLATFORM , UCOMPANY,
 		UCOSTCENTER,
 		UORGANIZATION, UPOSITION, 
 		UBPMGROUP,
@@ -688,24 +688,24 @@
 		delete from
 		<include refid="userObjectTableName"></include>
 		where
-		"USER_ID" != '1'
+		
+		<if test="USER_ID!=null and USER_ID!=''">
+		   "USER_ID"=#{USER_ID}
+		</if>
+		<if test="USER_IDS!=null and USER_IDS!=''">
+		   "USER_ID" in
+		<foreach item="item" index="index" collection="USER_IDS" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
 		<if test="BO_DB_ID!=null and BO_DB_ID!=''">
 		and "BO_DB_ID" in
 		<foreach item="item" index="index" collection="BO_DB_ID" open="(" separator="," close=")">
 			#{item}
 		</foreach>
 		</if>
-		<if test="USER_ID!=null and USER_ID!=''">
-		and "USER_ID"=#{USER_ID}
-		</if>
-		<if test="USER_IDS!=null and USER_IDS!=''">
-		and "USER_ID" in
-		<foreach item="item" index="index" collection="USER_IDS" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-		</if>
 		<if test="BO_TYPE!=null and BO_TYPE!=''">
-		and "BO_TYPE"=#{BO_TYPE}
+		   and "BO_TYPE"=#{BO_TYPE}
 		</if>
 	</delete>
 	
