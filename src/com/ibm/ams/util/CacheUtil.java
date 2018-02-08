@@ -343,6 +343,11 @@ public class CacheUtil {
 				}
 				menuList.get(i).setHasMenu(testRights);
 				if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
+					List<Menu> subMenu = menuList.get(i).getSubMenu();
+					//当有子节点的时候，前台不能要父节点ID，所以要去掉
+					if(subMenu!=null && subMenu.size()>0){
+						listMenuID.remove(Integer.valueOf(menu_ID));
+					}
 					readMenuGetMenuID(menuList.get(i).getSubMenu(), roleRights,listMenuID);//是：继续排查其子菜单
 				}
 			}
