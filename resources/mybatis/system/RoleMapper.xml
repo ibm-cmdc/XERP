@@ -64,19 +64,19 @@
 
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{ROLE_ID},
-		#{ROLE_NAME},
-		#{PARENT_ID},
-		#{RIGHTS},
-		#{ADD_QX},
-		#{DEL_QX},
-		#{EDIT_QX},
-		#{QUR_QX},
-		#{PLATFORM},
-		#{ROLE_TYPE},
+		#{ROLE_ID,jdbcType=NVARCHAR},
+		#{ROLE_NAME,jdbcType=NVARCHAR},
+		#{PARENT_ID,jdbcType=NVARCHAR},
+		#{RIGHTS,jdbcType=NVARCHAR},
+		#{ADD_QX,jdbcType=NVARCHAR},
+		#{DEL_QX,jdbcType=NVARCHAR},
+		#{EDIT_QX,jdbcType=NVARCHAR},
+		#{QUR_QX,jdbcType=NVARCHAR},
+		#{PLATFORM,jdbcType=NVARCHAR},
+		#{ROLE_TYPE,jdbcType=NVARCHAR},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
-		#{LAST_UPD_DT},
-		#{VER}
+		#{LAST_UPD_DT,jdbcType=NVARCHAR},
+		#{VER,jdbcType=NVARCHAR}
 		
 	</sql>
 

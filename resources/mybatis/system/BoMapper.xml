@@ -67,7 +67,7 @@
 		"ADD3",
 		"ADD4",
 		"ADD5",
-		"BPLATFORM"  ,
+		"BPLATFORM",
 		"LAST_UPD_USR",
 		"LAST_UPD_DT",
 		"VER"
@@ -92,22 +92,22 @@
 	</sql>
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{DB_ID},
-		#{BO_TYPE},
-		#{BO_NAME},
-		#{BO_ID},
-		#{BO_KEY},
-		#{BO_DESC},
-		#{BO_VALUE},
-		#{ADD1},
-		#{ADD2},
-		#{ADD3},
-		#{ADD4},
-		#{ADD5},
-		#{PLATFORM},
+		#{DB_ID,jdbcType=NVARCHAR},
+		#{BO_TYPE,jdbcType=NVARCHAR},
+		#{BO_NAME,jdbcType=NVARCHAR},
+		#{BO_ID,jdbcType=NVARCHAR},
+		#{BO_KEY,jdbcType=NVARCHAR},
+		#{BO_DESC,jdbcType=NVARCHAR},
+		#{BO_VALUE,jdbcType=NVARCHAR},
+		#{ADD1,jdbcType=NVARCHAR},
+		#{ADD2,jdbcType=NVARCHAR},
+		#{ADD3,jdbcType=NVARCHAR},
+		#{ADD4,jdbcType=NVARCHAR},
+		#{ADD5,jdbcType=NVARCHAR},
+		#{PLATFORM,jdbcType=NVARCHAR},
 		to_date(#{LAST_UPD_USR,jdbcType=DATE},'yyyy-mm-dd'),
-		#{LAST_UPD_DT},
-		#{VER}
+		#{LAST_UPD_DT,jdbcType=NVARCHAR},
+		#{VER,jdbcType=NVARCHAR}
 	</sql>
 	<sql id="BoCconditions">
 		<if test="DB_ID!=null and DB_ID!=''">
