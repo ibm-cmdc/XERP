@@ -17,6 +17,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ibm.ams.entity.system.Intf;
 import com.ibm.ams.entity.token.TokenModel;
+import com.ibm.ams.exception.AuthorizationException;
 import com.ibm.ams.service.role.RoleManager;
 import com.ibm.ams.service.token.TokenManager;
 import com.ibm.ams.util.Const;
@@ -34,7 +35,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 	
 	//拦截前处理
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws AuthorizationException,Exception{
 		// TODO Auto-generated method stub
 		
 		//如果不是映射到方法直接通过
@@ -72,12 +73,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 		String authorization = request.getHeader(Const.AUTHORIZATION); 
 		
 		if(authorization==null || "".equals(authorization)){
-			rspJson.put(Const.RESULT_CODE, "E");
-			rspJson.put(Const.RESULT_MSG, "接口未传输Token!");
-			PrintWriter out = response.getWriter();
-			out.print(rspJson.toString());
-	        out.flush();
-	        return false;
+			throw new AuthorizationException("接口未传输Token!");
 		}
 		
 		//验证token        
@@ -91,15 +87,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 			return true;        
 		}else{
 			//response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			
-			rspJson.put(Const.RESULT_CODE, "401");
-			rspJson.put(Const.RESULT_MSG, "当前用户无权限");
-			
-			PrintWriter out = response.getWriter();
-			out.print(rspJson.toString());
-	        out.flush();
-			//throw new AuthorizationException("当前请求无权限!");
-			return false;
+			throw new AuthorizationException("当前请求无权限!");
 		}        
 		
 	};
